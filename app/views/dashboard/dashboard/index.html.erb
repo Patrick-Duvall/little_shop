@@ -121,7 +121,7 @@
 
           <% order.order_items.each do |order_item| %>
               <% if !order.can_fulfill?(order_item) %>
-              <td>Insufficient inventory of <%= order_item.item.name %></td>
+              <td>Insufficient inventory of <%= order_item.item_name %></td>
               <% end %>
             <% end %>
 
