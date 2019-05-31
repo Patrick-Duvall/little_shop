@@ -16,6 +16,10 @@ class Order < ApplicationRecord
     oi.sum
   end
 
+  def can_fulfill?(order_item)
+    order_item.quantity <= order_item.item.inventory 
+  end
+
   def self.pending_orders_for_merchant(merchant_id)
     self.joins(:items)
         .where(status: :pending)
