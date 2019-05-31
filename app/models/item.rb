@@ -48,4 +48,9 @@ class Item < ApplicationRecord
   def ordered?
     order_items.count > 0
   end
+
+  def default_image?
+    image == "https://picsum.photos/200/300?image=1"
+  end
+
 end

@@ -60,6 +60,15 @@ RSpec.describe Item, type: :model do
       @order_item_4 = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
     end
 
+    describe "#default_image?" do
+      it "check if an image is the default image" do
+        item = create(:item, user: @merchant, image: "http://clipart-library.com/images/6Tpo6G8TE.jpg")
+        expect(item.default_image?).to eq(false)
+        expect(@item.default_image?).to eq(true)
+
+      end
+    end
+
     describe "#average_fulfillment_time" do
       it "calculates the average number of seconds between order_item creation and completion" do
         expect(@item.average_fulfillment_time).to eq(158400)
