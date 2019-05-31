@@ -66,6 +66,51 @@ RSpec.describe User, type: :model do
     end
   end
 
+    describe 'Patricks instance methods' do
+        before :each do
+          @merchant = create(:merchant)
+          @item1, @item2, @item3 = create_list(:item, 3, user: @merchant)
+
+          @order1, @order2 = create_list(:order, 2)
+          @order3 = create(:order)
+          @order4 = create(:cancelled_order)
+          @unfulfilled_1 = create(:order_item, order: @order1, item: @item1, quantity: 1, price: 2)
+          @unfulfilled_2 = create(:order_item, order: @order1, item: @item2, quantity: 2, price: 2)
+          create(:fulfilled_order_item, order: @order1, item: @item3, quantity: 2, price: 2)
+          @unfulfilled_3 = create(:order_item, order: @order2, item: @item2, quantity: 4, price: 2)
+          create(:fulfilled_order_item, order: @order2, item: @item3, quantity: 4, price: 2)
+          @unfulfilled_4 = create(:order_item, order: @order3, item: @item1, quantity: 4, price: 2)
+          create(:fulfilled_order_item, order: @order4, item: @item2, quantity: 5, price: 2)
+        end
+    it ".outstanding_order_count" do
+      expect(@merchant.outstanding_order_count).to eq(4)
+      @unfulfilled_1.fulfilled = true
+      @unfulfilled_1.save
+      @merchant.reload
+      expect(@merchant.outstanding_order_count).to eq(3)
+      @unfulfilled_2.fulfilled = true
+      @unfulfilled_2.save
+      @merchant.reload
+        expect(@merchant.outstanding_order_count).to eq(2)
+    end
+    it "outstanding_order_price_sum" do
+      @unfulfilled_1.fulfilled = false
+      @unfulfilled_1.save
+      @unfulfilled_2.fulfilled = false
+      @unfulfilled_2.save
+      @merchant.reload
+      expect(@merchant.outstanding_order_price_sum).to eq(22)
+      @unfulfilled_1.fulfilled = true
+      @unfulfilled_1.save
+      @merchant.reload
+      expect(@merchant.outstanding_order_price_sum).to eq(20)
+      @unfulfilled_4.fulfilled = true
+      @unfulfilled_4.save
+      @merchant.reload
+      expect(@merchant.outstanding_order_price_sum).to eq(12)
+    end
+  end
+
   describe 'instance methods' do
     before :each do
       @u1 = create(:user, state: "CO", city: "Anywhere")
@@ -110,6 +155,10 @@ RSpec.describe User, type: :model do
       @oi5.fulfill
       @oi6.fulfill
       @oi7.fulfill
+    end
+
+    it '.outstanding_order_count' do
+
     end
 
     it '.active_items' do
