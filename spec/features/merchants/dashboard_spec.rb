@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'merchant dashboard' do
+
   before :each do
     @merchant = create(:merchant)
     @admin = create(:admin)
@@ -114,10 +115,10 @@ RSpec.describe 'merchant dashboard' do
 
     describe "merchant sees a sum outstanding orders statistic" do
       it "shows me a sum of my outstanding orders totals" do
-        create(:fulfulled_order_item, order: @o1, item: @i1, quantity: 3, price: 3)
         visit dashboard_path
-        within "#unfillfilled-orders-price-and-number" do
-          expect(page).to have_content("You have #{@merchant.outstanding_order_count} unfulfilled orders worth #{@merchant.outstanding_order_price_sum}")
+        save_and_open_page
+        within "#unfulfilled-orders-price-and-number" do
+          expect(page).to have_content("You have #{@merchant.outstanding_order_count} unfulfilled orders worth #{ActiveSupport::NumberHelper.number_to_currency(@merchant.outstanding_order_price_sum)}")
         end
 
       end
