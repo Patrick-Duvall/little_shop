@@ -129,13 +129,25 @@ RSpec.describe 'merchant dashboard' do
       it "says which orders I cannot fulfill" do
         oi6 = create(:order_item, order: @o1, item: @i3, quantity: 10, price: 2)
         oi7 = create(:order_item, order: @o1, item: @i2, quantity: 10, price: 2)
+        oi8 = create(:fulfilled_order_item, order: @o2, item: @i2, quantity: 20, price: 2)
         visit dashboard_path
         within "#order-#{@o1.id}" do
           expect(page).to have_content("Insufficient inventory of #{@i3.name}")
           expect(page).to have_content("Insufficient inventory of #{@i2.name}")
           expect(page).to_not  have_content("Insufficient inventory of #{@i1.name}")
         end
+
+        within "#order-#{@o2.id}" do
+          expect(page).to_not have_content("Insufficient inventory of #{@i2.name}")
+        end
       end
+    end
+
+    describe "I am warned when all order_items excede my inventory" do
+      it "flashes a warning if the sum of all order_items for an item excede its inventory" do
+
+      end
+
     end
 
   end
