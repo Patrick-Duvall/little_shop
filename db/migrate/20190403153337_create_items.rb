@@ -5,7 +5,7 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.boolean :active, default: false
       t.decimal :price
       t.text :description
-      t.string :image
+      t.string :image, default: "https://picsum.photos/200/300?image=1"
       t.integer :inventory
 
       t.timestamps

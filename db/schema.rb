@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20190403231217) do
     t.boolean "active", default: false
     t.decimal "price"
     t.text "description"
-    t.string "image"
+    t.string "image", default: "https://picsum.photos/200/300?image=1"
     t.integer "inventory"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
