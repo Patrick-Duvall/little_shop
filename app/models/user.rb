@@ -14,10 +14,10 @@ class User < ApplicationRecord
   has_many :items, foreign_key: 'merchant_id'
 
   def outstanding_order_count
-    order_items.where(fulfilled: false).count
+    items.joins(:order_items).select('order_items.*').where('order_items.fulfilled = false').count
   end
   def outstanding_order_price_sum
-    order_items.where(fulfilled: false).sum(:price * :quantity)
+    items.joins(:order_items).select('order_items.price * order_items.quantity').where('order_items.fulfilled = false')
   end
 
   def active_items
