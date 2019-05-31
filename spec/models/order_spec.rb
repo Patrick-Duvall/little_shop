@@ -34,6 +34,16 @@ RSpec.describe Order, type: :model do
       create(:order_item, order: @o3, item: @i1, quantity: 4, price: 2)
       create(:order_item, order: @o4, item: @i2, quantity: 5, price: 2)
       create(:order_item, order: @o5, item: @i1, quantity: 5, price: 2)
+
+    end
+
+    it ".can_fulfill?(item)" do
+      o6 = create(:order)
+      create(:order_item, order: @o6, item: @i2, quantity: 10, price: 2)
+      create(:order_item, order: @o6, item: @i1, quantity: 4, price: 2)
+      expect(@o6.can_fulfill?(@i2)).to eq(false)
+      expect(@o6.can_fulfill?(@i1)).to eq(false)
+
     end
 
     it '.total_item_count' do
