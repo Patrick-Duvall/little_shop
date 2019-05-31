@@ -130,7 +130,6 @@ RSpec.describe 'merchant dashboard' do
         oi6 = create(:order_item, order: @o1, item: @i3, quantity: 10, price: 2)
         oi7 = create(:order_item, order: @o1, item: @i2, quantity: 10, price: 2)
         visit dashboard_path
-        save_and_open_page
         within "#order-#{@o1.id}" do
           expect(page).to have_content("Insufficient inventory of #{@i3.name}")
           expect(page).to have_content("Insufficient inventory of #{@i2.name}")
