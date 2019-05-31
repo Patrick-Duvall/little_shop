@@ -13,6 +13,13 @@ class User < ApplicationRecord
   # as a merchant
   has_many :items, foreign_key: 'merchant_id'
 
+  def outstanding_order_count
+    order_items.where(fulfilled: false).count
+  end
+  def outstanding_order_price_sum
+    order_items.where(fulfilled: false).sum(:price * :quantity)
+  end
+
   def active_items
     items.where(active: true).order(:name)
   end
