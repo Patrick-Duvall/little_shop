@@ -52,7 +52,7 @@ RSpec.describe "Merchant adding an item" do
         expect(page).to have_content(@new_name)
         expect(page).to have_content(@new_price)
         expect(page).to have_content(@new_inventory)
-        expect(page).to have_xpath("//img[@src='https://picsum.photos/200/300']")
+        expect(page).to have_xpath("//img[@src='https://picsum.photos/200/300?image=1']")
         expect(page).to have_button("Disable Item")
       end
     end
