@@ -13,6 +13,15 @@
   </div>
 </div>
 
+<% if current_merchant? && current_user == @merchant && @items.any?(&:default_image?) %>
+<section id="add-image">
+<p>These items need images:</p>
+  <% @items.each do |item| %>
+  <p><%= link_to item.name, edit_dashboard_item_path(item) if item.default_image? %></p>
+  <% end %>
+</section>
+<% end %>
+
 <%= tag.div class: "card" do %>
   <%= tag.section class: "statistics card-body float-left m-4" do %>
     <%= tag.section id: "top-items-sold-by-quantity", class: "card-body float-left m-2" do %>
