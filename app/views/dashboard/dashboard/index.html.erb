@@ -94,6 +94,7 @@
 </section>
 
 <% if @pending_orders %>
+<h3>Pending Orders</h3>
   <table class="table">
     <thead>
       <tr>
@@ -111,9 +112,19 @@
           <% elsif current_admin? %>
           <%= order.id %>
           <% end %></td>
+
+
+
           <td><%= order.created_at %></td>
           <td><%= order.total_quantity_for_merchant(@merchant.id) %></td>
           <td><%= order.total_price_for_merchant(@merchant.id) %></td>
+
+          <% order.order_items.each do |order_item| %>
+              <% if !order.can_fulfill?(order_item) %>
+              <td>Insufficient inventory of <%= order_item.item_name %></td>
+              <% end %>
+            <% end %>
+
         </tr>
       <% end %>
     </tbody>

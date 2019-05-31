@@ -11,11 +11,11 @@ RSpec.describe 'merchant dashboard' do
     @o1, @o2 = create_list(:order, 2)
     @o3 = create(:shipped_order)
     @o4 = create(:cancelled_order)
-    create(:order_item, order: @o1, item: @i1, quantity: 1, price: 2)
-    create(:order_item, order: @o1, item: @i2, quantity: 2, price: 2)
-    create(:order_item, order: @o2, item: @i2, quantity: 4, price: 2)
-    create(:order_item, order: @o3, item: @i1, quantity: 4, price: 2)
-    create(:order_item, order: @o4, item: @i2, quantity: 5, price: 2)
+    @oi1 = create(:order_item, order: @o1, item: @i1, quantity: 1, price: 2)
+    @oi2 = create(:order_item, order: @o1, item: @i2, quantity: 2, price: 2)
+    @oi3 = create(:order_item, order: @o2, item: @i2, quantity: 4, price: 2)
+    @oi4 = create(:order_item, order: @o3, item: @i1, quantity: 4, price: 2)
+    @oi5 = create(:order_item, order: @o4, item: @i2, quantity: 5, price: 2)
   end
 
   describe 'merchant user visits their profile' do
@@ -116,13 +116,26 @@ RSpec.describe 'merchant dashboard' do
     describe "merchant sees a sum outstanding orders statistic" do
       it "shows me a sum of my outstanding orders totals" do
         visit dashboard_path
-        save_and_open_page
         within "#unfulfilled-orders-price-and-number" do
           expect(page).to have_content("You have #{@merchant.outstanding_order_count} unfulfilled orders worth #{ActiveSupport::NumberHelper.number_to_currency(@merchant.outstanding_order_price_sum)}")
         end
-
       end
+    end
 
+#     As a Merchant, When I visit my dashboard
+# -Next to each order, I see a warning if that items quantity exceeds my inventory
+
+    describe "I am warned of items I cannot fulfill" do
+      it "says which orders I cannot fulfill" do
+        oi6 = create(:order_item, order: @o1, item: @i3, quantity: 10, price: 2)
+        oi7 = create(:order_item, order: @o1, item: @i2, quantity: 10, price: 2)
+        visit dashboard_path
+        within "#order-#{@o1.id}" do
+          expect(page).to have_content("Insufficient inventory of #{@i3.name}")
+          expect(page).to have_content("Insufficient inventory of #{@i2.name}")
+          expect(page).to_not  have_content("Insufficient inventory of #{@i1.name}")
+        end
+      end
     end
 
   end

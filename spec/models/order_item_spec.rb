@@ -48,6 +48,14 @@ RSpec.describe OrderItem, type: :model do
       expect(item.inventory).to eq(0)
     end
 
+    it '.item_name' do
+      merchant = create(:merchant)
+      i1 = create(:item, user: merchant)
+      oi1 = create(:order_item, quantity: 1, item: i1)
+
+      expect(oi1.item_name).to eq(i1.name)
+    end
+
     it 'inventory_available' do
       item = create(:item, inventory:2)
       oi1 = create(:order_item, quantity: 1, item: item)
@@ -58,5 +66,6 @@ RSpec.describe OrderItem, type: :model do
       expect(oi2.inventory_available).to eq(true)
       expect(oi3.inventory_available).to eq(false)
     end
+
   end
 end

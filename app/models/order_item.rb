@@ -15,6 +15,10 @@ class OrderItem < ApplicationRecord
     quantity * price
   end
 
+  def item_name
+    item.name
+  end
+
   def fulfill
     if item.inventory >= quantity && !self.fulfilled
       item.inventory -= quantity
