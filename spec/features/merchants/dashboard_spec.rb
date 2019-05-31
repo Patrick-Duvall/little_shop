@@ -111,5 +111,19 @@ RSpec.describe 'merchant dashboard' do
           expect(current_path).to eq(edit_dashboard_item_path(@i2))
       end
     end
+
+    describe "merchant sees a sum outstanding orders statistic" do
+      it "shows me a sum of my outstanding orders totals" do
+        create(:fulfulled_order_item, order: @o1, item: @i1, quantity: 3, price: 3)
+        visit dashboard_path
+        within "#unfillfilled-orders-price-and-number" do
+          expect(page).to have_content("You have #{@merchant.outstanding_order_count} unfulfilled orders worth #{@merchant.outstanding_order_sum}")
+        end
+        
+        end
+
+      end
+
+    end
   end
 end
