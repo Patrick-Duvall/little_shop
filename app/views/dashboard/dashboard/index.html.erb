@@ -32,6 +32,10 @@
         <% end %>
       </ul>
     <% end %>
+    <%= tag.section id: "unfulfilled-orders-price-and-number", class: "card-body float-left m-2" do %>
+      <h5 class="card-title">Outstanding Orders</h5>
+        <p>You have <%=@merchant.outstanding_order_count%> unfulfilled orders worth <%=number_to_currency(@merchant.outstanding_order_price_sum)%></p>
+    <% end %>
     <%= tag.section id: "percent-of-items-sold", class: "card-body float-left m-2" do %>
       <h5 class="card-title">Sold Items Percentage</h5>
         <p> You have sold <%= pluralize(@merchant.total_items_sold, 'item') %>, <%= number_to_percentage(@merchant.percent_of_items_sold, precision: 2) %> of your total inventory</p>
