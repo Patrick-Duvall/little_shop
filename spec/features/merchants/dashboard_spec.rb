@@ -5,6 +5,7 @@ RSpec.describe 'merchant dashboard' do
     @merchant = create(:merchant)
     @admin = create(:admin)
     @i1, @i2 = create_list(:item, 2, user: @merchant)
+
     @o1, @o2 = create_list(:order, 2)
     @o3 = create(:shipped_order)
     @o4 = create(:cancelled_order)
@@ -42,6 +43,7 @@ RSpec.describe 'merchant dashboard' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
 
       visit dashboard_path
+      save_and_open_page
     end
     it 'shows merchant information' do
       expect(page).to have_content(@merchant.name)
@@ -91,5 +93,10 @@ RSpec.describe 'merchant dashboard' do
         expect(current_path).to eq(admin_merchant_items_path(@merchant))
       end
     end
+#     As a Merchant, When I visit my dashboard
+# -for each item using a placeholder image
+# -A item appears on a list
+# -On this least each items name is a link to that items edit page
+
   end
 end
