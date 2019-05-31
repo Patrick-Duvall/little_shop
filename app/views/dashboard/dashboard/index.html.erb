@@ -120,7 +120,7 @@
           <td><%= order.total_price_for_merchant(@merchant.id) %></td>
 
           <% order.order_items.each do |order_item| %>
-              <% if !order.can_fulfill?(order_item) %>
+              <% if !order.can_fulfill?(order_item) && !order_item.fulfilled %>
               <td>Insufficient inventory of <%= order_item.item_name %></td>
               <% end %>
             <% end %>
