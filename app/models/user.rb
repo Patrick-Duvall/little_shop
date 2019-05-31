@@ -17,7 +17,7 @@ class User < ApplicationRecord
     items.joins(:order_items).select('order_items.*').where('order_items.fulfilled = false').count
   end
   def outstanding_order_price_sum
-    items.joins(:order_items).select('order_items.price * order_items.quantity').where('order_items.fulfilled = false')
+    items.joins(:order_items).select('order_items.price, order_items.quantity').where('order_items.fulfilled = false').sum('order_items.price * order_items.quantity')
   end
 
   def active_items

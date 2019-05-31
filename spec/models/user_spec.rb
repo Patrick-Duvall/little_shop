@@ -105,7 +105,7 @@ RSpec.describe User, type: :model do
       @merchant.reload
       expect(@merchant.outstanding_order_price_sum).to eq(20)
       @unfulfilled_4.fulfilled = true
-      @unfulfilled_1.save
+      @unfulfilled_4.save
       @merchant.reload
       expect(@merchant.outstanding_order_price_sum).to eq(12)
     end
