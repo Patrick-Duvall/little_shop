@@ -7,6 +7,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
 
   # as a consumer
+  has_many :addresses
   has_many :orders
   has_many :order_items, through: :orders
 
