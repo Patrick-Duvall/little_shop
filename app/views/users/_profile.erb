@@ -17,7 +17,7 @@
   <% if @addresses %>
   <p>Other Addresses</p>
   <%  @addresses.each do |address| %>
-    <p>
+    <p id="address-<%=address.id%>">
       <%= address.nick_name %> :
       <%= address.address %>,
       <%= address.city %>
