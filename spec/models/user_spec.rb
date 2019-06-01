@@ -109,6 +109,20 @@ RSpec.describe User, type: :model do
       @merchant.reload
       expect(@merchant.outstanding_order_price_sum).to eq(12)
     end
+
+    it ".over_ordered_items" do
+      # oi6 = create(:order_item, order: @order2, item: @item1, quantity: 4)
+      expect(@merchant.over_ordered_items).to eq([@item1])
+      oi7 = create(:order_item, order: @order1, item: @item3, quantity: 10)
+      expect(@merchant.over_ordered_items).to eq([@item1, @item3])
+      oi8 = create(:order_item, order: @order4, item: @item2, quantity: 10) #cancelled
+      @merchant.reload
+      expect(@merchant.over_ordered_items).to eq([@item1, @item3])
+      oi9 = create(:fulfilled_order_item, order: @order3, item: @item2, quantity: 6) #fulfilled item
+      @merchant.reload
+      expect(@merchant.over_ordered_items).to eq([@item1, @item3])
+
+    end
   end
 
   describe 'instance methods' do

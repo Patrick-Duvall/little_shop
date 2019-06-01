@@ -25,10 +25,12 @@ class User < ApplicationRecord
   end
 
   def over_ordered_items
-    # require "pry"; binding.pry
-    # items.joins(:order_items).group('items.id').having("sum(order_items.quantity) > items.inventory").joins(:orders).where('orders.status = 0').select('items.*')
-    # require "pry"; binding.pry
-    items.joins(:orders).where('orders.status = 0').group('items.id').having("sum(order_items.quantity) > items.inventory").select('items.*')
+    items.joins(:orders)
+    .where('orders.status = 0')
+    .where('order_items.fulfilled = false')
+    .group('items.id')
+    .having("sum(order_items.quantity) > items.inventory")
+    .select('items.*')
 
   end
 
