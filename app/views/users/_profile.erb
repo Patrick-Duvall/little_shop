@@ -13,6 +13,7 @@
       <%= @user.zip %>
     </p>
   </aside>
+  <%= link_to "Add address", new_user_address_path(@user) %>
   <p><%= link_to 'Edit Profile Data', edit_profile_path unless current_admin? %></p>
 </section>
 
