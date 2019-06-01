@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
   #user address paths
   resources :users do
-    resources :addresses, only: :new
+    resources :addresses, only: [:new, :create]
   end
 
 

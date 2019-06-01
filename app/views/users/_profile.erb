@@ -14,6 +14,16 @@
     </p>
   </aside>
   <%= link_to "Add address", new_user_address_path(@user) %>
+  <p>Other Addresses</p>
+  <%  @addresses.each do |address| %>
+    <p>
+      <%= address.nick_name %> :
+      <%= address.address %>,
+      <%= address.city %>
+      <%= address.state %>,
+      <%= address.zip %>
+    </p>
+  <% end %>
   <p><%= link_to 'Edit Profile Data', edit_profile_path unless current_admin? %></p>
 </section>
 
