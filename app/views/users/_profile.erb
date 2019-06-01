@@ -15,16 +15,19 @@
   </aside>
   <%= link_to "Add address", new_user_address_path(@user) %>
   <% if @addresses %>
-  <p>Other Addresses</p>
-  <%  @addresses.each do |address| %>
-    <p id="address-<%=address.id%>">
-      <%= address.nick_name %> :
-      <%= address.address %>,
-      <%= address.city %>
-      <%= address.state %>,
-      <%= address.zip %>
-    </p>
-  <% end %>
+    <p>Other Addresses</p>
+    <%  @addresses.each do |address| %>
+    <section id="address-<%=address.id%>">
+      <p>
+        <%= address.nick_name %> :
+        <%= address.address %>,
+        <%= address.city %>
+        <%= address.state %>,
+        <%= address.zip %>
+      </p>
+      <%= link_to "Delete #{address.nick_name}", user_address_path(@user, address), method: :delete %>
+      </section>
+    <% end %>
   <% end %>
   <p><%= link_to 'Edit Profile Data', edit_profile_path unless current_admin? %></p>
 </section>

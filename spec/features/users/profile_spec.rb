@@ -167,7 +167,7 @@ RSpec.describe 'user profile', type: :feature do
       a2 = @u1.addresses.create(nick_name: "school", address: "2243 lane", city: "ville", state: "Maine", zip: "47906")
       visit profile_path
       within "#address-#{a1.id}" do
-        click_button "Delete #{a1.nick_name}"
+        click_link "Delete #{a1.nick_name}"
     end
     expect(current_path).to eq(profile_path)
     expect(page).to_not have_content("#{a1.nick_name} : #{a1.address}, #{a1.city} #{a1.state}, #{a1.zip}")
