@@ -134,17 +134,20 @@ RSpec.describe 'user profile', type: :feature do
   end
 
   describe "User can manage addresses" do
-    it "allow me to add an address" do
-
-      u1 = create(:user)
+    before :each do
+      @u1 = create(:user)
       visit root_path
       click_link "Log in"
-      fill_in "email", with: u1.email
-      fill_in "password", with: u1.password
+      fill_in "email", with: @u1.email
+      fill_in "password", with: @u1.password
       click_button "Log in"
+    end
+
+
+    it "allows me to add an address" do
 
       click_link "Add address"
-      expect(current_path).to eq(new_user_address_path(u1))
+      expect(current_path).to eq(new_user_address_path(@u1))
         fill_in "address_nick_name", with: "work"
       fill_in "address_address", with: "123 st"
       fill_in "address_city", with: "Granger"
@@ -154,8 +157,12 @@ RSpec.describe 'user profile', type: :feature do
       click_button "Create Address"
 
       expect(current_path).to eq(profile_path)
+      within "#address-#{Address.last.id}" do
       expect(page).to have_content("work : 123 st, Granger Montana, 12544")
+    end
+    end
 
+    it "allows me to delete an address" do
 
     end
 
