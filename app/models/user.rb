@@ -24,6 +24,16 @@ class User < ApplicationRecord
     items.where(active: true).order(:name)
   end
 
+  def over_ordered_items
+    items.joins(:orders)
+    .where('orders.status = 0')
+    .where('order_items.fulfilled = false')
+    .group('items.id')
+    .having("sum(order_items.quantity) > items.inventory")
+    .select('items.*')
+
+  end
+
   def top_items_sold_by_quantity(limit)
     items.joins(order_items: :order)
          .where(order_items: {fulfilled: true}, orders: {status: :shipped})

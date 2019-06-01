@@ -7,7 +7,7 @@ RSpec.describe 'merchant dashboard' do
     @admin = create(:admin)
     @i1, @i2 = create_list(:item, 2, user: @merchant)
     @i3 = create(:item, user: @merchant, image:"http://clipart-library.com/images/6Tpo6G8TE.jpg")
-
+ #Inventory 4 , 6 , 8 ^^
     @o1, @o2 = create_list(:order, 2)
     @o3 = create(:shipped_order)
     @o4 = create(:cancelled_order)
@@ -131,6 +131,7 @@ RSpec.describe 'merchant dashboard' do
         oi7 = create(:order_item, order: @o1, item: @i2, quantity: 10, price: 2)
         oi8 = create(:fulfilled_order_item, order: @o2, item: @i2, quantity: 20, price: 2)
         visit dashboard_path
+
         within "#order-#{@o1.id}" do
           expect(page).to have_content("Insufficient inventory of #{@i3.name}")
           expect(page).to have_content("Insufficient inventory of #{@i2.name}")
@@ -145,6 +146,20 @@ RSpec.describe 'merchant dashboard' do
 
     describe "I am warned when all order_items excede my inventory" do
       it "flashes a warning if the sum of all order_items for an item excede its inventory" do
+          i4, i5 = create_list(:item, 2, user: @merchant)
+          #Inventory 10,12
+        oi6 = create(:order_item, order: @o4, item: i4, quantity: 20, price: 2) #cancelled order
+        oi7 = create(:fulfilled_order_item, order: @o3, item: @i3, quantity: 20, price: 2) #fulfilled item
+        oi8 = create(:order_item, order: @o2, item: i5, quantity: 8, price: 2) #cant fulfill i5
+        oi9 = create(:order_item, order: @o2, item: i5, quantity: 5, price: 2)
+        visit dashboard_path
+        within "#body-content-no-nav" do
+          expect(page).to have_content("Cannot fulfill all orders of #{i5.name}")
+          expect(page).to_not have_content("Cannot fulfill all orders of #{@i3.name}")
+          expect(page).to_not have_content("Cannot fulfill all orders of #{i4.name}")
+          expect(page).to_not have_content("Cannot fulfill all orders of #{@i2.name}")
+          expect(page).to_not have_content("Cannot fulfill all orders of #{@i1.name}")
+        end
 
       end
 

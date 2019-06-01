@@ -8,7 +8,7 @@ Item.destroy_all
 User.destroy_all
 
 admin = create(:admin)
-user = create(:user)
+user_1, user_2 = create_list(:user, 2)
 merchant_1 = create(:merchant)
 
 merchant_2, merchant_3, merchant_4 = create_list(:merchant, 3)
