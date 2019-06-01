@@ -115,10 +115,10 @@ RSpec.describe User, type: :model do
       expect(@merchant.over_ordered_items).to eq([@item1])
       oi7 = create(:order_item, order: @order1, item: @item3, quantity: 10)
       expect(@merchant.over_ordered_items).to eq([@item1, @item3])
-      oi8 = create(:order_item, order: @order4, item: @item2, quantity: 10) #cancelled
+      oi8 = create(:order_item, order: @order4, item: @item2, quantity: 10) #doesnt include cancelled
       @merchant.reload
       expect(@merchant.over_ordered_items).to eq([@item1, @item3])
-      oi9 = create(:fulfilled_order_item, order: @order3, item: @item2, quantity: 6) #fulfilled item
+      oi9 = create(:fulfilled_order_item, order: @order3, item: @item2, quantity: 6) #doesnt include fulfilled
       @merchant.reload
       expect(@merchant.over_ordered_items).to eq([@item1, @item3])
 
