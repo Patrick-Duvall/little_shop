@@ -132,4 +132,32 @@ RSpec.describe 'user profile', type: :feature do
       expect(page).to have_content("Email has already been taken")
     end
   end
+
+  describe "User can manage addresses" do
+    it "allow me to add an address" do
+
+      u1 = create(:user)
+      visit root_path
+      click_link "Log in"
+      fill_in "email", with: u1.email
+      fill_in "password", with: u1.password
+      click_button "Log in"
+
+      click_link "Add address"
+      expect(current_path).to eq(new_user_address_path(u1))
+        fill_in "address_nick_name", with: "work"
+      fill_in "address_address", with: "123 st"
+      fill_in "address_city", with: "Granger"
+      fill_in "address_state", with: "Montana"
+      fill_in "address_zip", with: "12544"
+
+      click_button "Create Address"
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to have_content("work : 123 st, Granger Montana, 12544")
+
+
+    end
+
+  end
 end
