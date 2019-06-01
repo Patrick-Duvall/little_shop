@@ -24,6 +24,14 @@ class User < ApplicationRecord
     items.where(active: true).order(:name)
   end
 
+  def over_ordered_items
+    # require "pry"; binding.pry
+    # items.joins(:order_items).group('items.id').having("sum(order_items.quantity) > items.inventory").joins(:orders).where('orders.status = 0').select('items.*')
+    # require "pry"; binding.pry
+    items.joins(:orders).where('orders.status = 0').group('items.id').having("sum(order_items.quantity) > items.inventory").select('items.*')
+
+  end
+
   def top_items_sold_by_quantity(limit)
     items.joins(order_items: :order)
          .where(order_items: {fulfilled: true}, orders: {status: :shipped})
