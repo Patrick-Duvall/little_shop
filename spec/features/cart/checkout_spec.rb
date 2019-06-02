@@ -91,12 +91,13 @@ RSpec.describe "Checking out" do
         expect(page).to have_content("Status: pending")
         expect(page).to have_content("Address: #{user.addresses[0].nick_name}")
       end
+    end
 
       it "shows multiple checkout options If I have multiple addresses" do
         user = create(:user)
         a1 = create(:address, user: user)
-        a2 = create(:address, user: user, nick_name: school)
-        a3 = create(:address, user: user, nick_name: work)
+        a2 = create(:address, user: user, nick_name: 'school')
+        a3 = create(:address, user: user, nick_name: 'work')
         login_as(user)
         visit cart_path
 
@@ -110,9 +111,7 @@ RSpec.describe "Checking out" do
           expect(page).to have_content("Status: pending")
           expect(page).to have_content("Address: #{user.addresses[2].nick_name}")
         end
-
       end
-    end
     it "does not let me checkout with no addresses" do
         user = create(:user)
         login_as(user)
