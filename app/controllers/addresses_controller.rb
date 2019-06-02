@@ -22,6 +22,7 @@ class AddressesController < ApplicationController
   end
 
   def destroy
+    
     address = Address.find(params[:id])
     address.orders.each{|order| order.update(address_id: nil)}
     address.destroy
