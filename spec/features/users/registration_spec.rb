@@ -24,7 +24,7 @@ RSpec.describe 'the registration page' do
 
       expect(page).to have_content("Registration Successful! You are now logged in.")
       expect(page).to have_content("Logged in as #{user.name}")
-      w
+      
     end
   end
 
