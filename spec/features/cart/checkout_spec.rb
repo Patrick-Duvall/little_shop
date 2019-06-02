@@ -97,17 +97,25 @@ RSpec.describe "Checking out" do
         login_as(user)
         # allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
         visit cart_path
-        expect(page).to have_content("You must have an address to check out")
+        expect(page).to have_link("You must have an address to check out")
         expect(page).to_not have_button("Check Out")
+        click_link("You must have an address to check out")
+        expect(current_path).to eq(new_user_address_path(user))
     end
     it "doesnt tell me I need an address If I have one" do
       user = create(:user)
       a1 = create(:address, user: user)
       login_as(user)
       visit cart_path
-      save_and_open_page
-      expect(page).to_not have_content("You must have an address to check out")
+      expect(page).to_not have_link("You must have an address to check out")
     end
+    # it "renders 404 if I try manually" do
+    #   # -If I try to check out manually I am redirected to a 404 page
+    #   user = create(:user)
+    #   visit profile_order_path(user)
+    #   expect(page.status_code).to eq(404)
+    #
+    # end
   end
 
   context "as a visitor" do

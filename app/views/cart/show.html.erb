@@ -9,7 +9,7 @@
     <% end %>
 
     <% if current_user.addresses.empty? %>
-      <p>You must have an address to check out</p>
+    <%= link_to "You must have an address to check out", new_user_address_path(current_user) %>
     <% end %>
 
 
