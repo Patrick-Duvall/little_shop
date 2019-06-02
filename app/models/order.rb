@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
   belongs_to :user
+  belongs_to :address
   has_many :order_items
   has_many :items, through: :order_items
 
@@ -17,7 +18,7 @@ class Order < ApplicationRecord
   end
 
   def can_fulfill?(order_item)
-    order_item.quantity <= order_item.item.inventory 
+    order_item.quantity <= order_item.item.inventory
   end
 
   def self.pending_orders_for_merchant(merchant_id)
