@@ -23,6 +23,7 @@ RSpec.describe "Checking out" do
   context "as a logged in regular user" do
     before :each do
       user = create(:user)
+      a1 = create(:address, user: user)
       login_as(user)
       visit cart_path
 
@@ -78,6 +79,7 @@ RSpec.describe "Checking out" do
   describe "when checking out" do
     it "allows me to choose an address to ship to" do
       user = create(:user)
+      a1 = create(:address, user: user)
       login_as(user)
       visit cart_path
 
