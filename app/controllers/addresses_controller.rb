@@ -10,6 +10,18 @@ class AddressesController < ApplicationController
     redirect_to profile_path
   end
 
+  def edit
+    @address = Address.find(params[:id])
+    @user = User.find(params[:user_id])
+  end
+
+  def update
+    address = Address.find(params[:id])
+    address.update(address_params)
+
+    redirect_to profile_path
+  end
+
   def destroy
     address = Address.find(params[:id])
     address.destroy

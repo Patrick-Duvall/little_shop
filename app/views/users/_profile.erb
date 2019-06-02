@@ -26,6 +26,8 @@
         <%= address.zip %>
       </p>
       <%= link_to "Delete #{address.nick_name}", user_address_path(@user, address), method: :delete %>
+      <%= link_to "Edit #{address.nick_name}", edit_user_address_path(@user, address) %>
+
       </section>
     <% end %>
   <% end %>

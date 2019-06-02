@@ -191,19 +191,18 @@ RSpec.describe 'user profile', type: :feature do
       within "#address-#{a1.id}" do
         click_link "Edit #{a1.nick_name}"
       end
-
     fill_in "address_address", with: "444 blvd"
     fill_in "address_city", with: "Dead Horse"
     fill_in "address_state", with: "Montana"
     fill_in "address_zip", with: "12544"
-    click_link "Edit Address"
+    click_button "Update Address"
     expect(current_path).to eq(profile_path)
     expect(page).to have_content("work : 444 blvd, Dead Horse Montana, 12544")
       within "#address-#{a1.id}" do
         click_link "Edit #{a1.nick_name}"
       end
     fill_in "address_zip", with: "80543"
-    click_link "Edit Address"
+    click_button "Update Address"
     expect(page).to have_content("work : 444 blvd, Dead Horse Montana, 80543")
 
     end
