@@ -186,6 +186,16 @@ RSpec.describe 'user profile', type: :feature do
 
     end
 
+    it "still loads my profile page when I have no addresses" do
+      user = create(:user)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+      visit profile_path
+      within 'h3' do
+        expect(page).to_not have_content('Primary Address:')
+      end
+      expect(page).to_not have_content('My Addresses')
+    end
+
 
   end
 end
