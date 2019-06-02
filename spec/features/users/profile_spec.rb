@@ -157,6 +157,21 @@ RSpec.describe 'user profile', type: :feature do
       expect(page).to_not have_content("#{a2.nick_name} : #{a2.address}, #{a2.city} #{a2.state}, #{a2.zip}")
     end
 
+    it "lets me delete an address with orders, sets orders address id to nil" do
+      a1 = create(:address, user: @u1)
+      order = create(:order, user: @u1, address: a1)
+      visit profile_path
+      within "#address-#{a1.id}" do
+        click_link "Delete #{a1.nick_name}"
+      end
+      expect(current_path).to eq(profile_path)
+      expect(page).to_not have_css("#address-#{a1.id}")
+      save_and_open_page
+      order.reload
+      expect(order.address_id).to eq(nil)
+
+    end
+
 #     As a registered user, When I visit my profile
 # -Next to each address I see a button to edit that address.
 # -When I click this button I am taken to an address edit form
