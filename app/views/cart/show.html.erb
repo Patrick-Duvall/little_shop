@@ -4,10 +4,11 @@
 <% else %>
   <h3>Total: <%= number_to_currency(cart.total) %></h3>
   <% if current_user %>
-    <%  current_user.addresses.each do |address| %>
-      <%= button_to "Check Out #{address.nick_name}", profile_orders_path(address_id: address.id), method: :post %>
-    <% end %>
-
+  <%= form_tag({controller: "profile/orders", action: "create"}, method: :post) do %>
+  <%= label_tag :address_select %>
+  <%= select_tag :address_select, options_for_select(current_user.addresses.map{|a|[a.nick_name, a.id]}) %>
+  <%= submit_tag "Check Out" unless current_user.addresses.empty? %>
+<% end %>
     <% if current_user.addresses.empty? %>
     <%= link_to "You must have an address to check out", new_user_address_path(current_user) %>
     <% end %>

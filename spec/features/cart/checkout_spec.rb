@@ -77,41 +77,25 @@ RSpec.describe "Checking out" do
   end
 
   describe "when checking out" do
-    it "allows me to choose an address to ship to" do
+
+    it "lets me choose an address from a dropdown" do
       user = create(:user)
       a1 = create(:address, user: user)
+      a2 = create(:address, user: user, nick_name: 'school')
+      a3 = create(:address, user: user, nick_name: 'work')
       login_as(user)
       visit cart_path
-
-      click_button "Check Out #{user.addresses[0].nick_name}"
+      select "#{a3.nick_name}", from:  "address_select"
+      click_button "Check Out"
       new_order = Order.last
       expect(current_path).to eq(profile_orders_path)
       within("#order-#{new_order.id}") do
         expect(page).to have_link("Order ID #{new_order.id}")
         expect(page).to have_content("Status: pending")
-        expect(page).to have_content("Address: #{user.addresses[0].nick_name}")
+        expect(page).to have_content("Address: #{a3.nick_name}")
       end
+
     end
-
-      it "shows multiple checkout options If I have multiple addresses" do
-        user = create(:user)
-        a1 = create(:address, user: user)
-        a2 = create(:address, user: user, nick_name: 'school')
-        a3 = create(:address, user: user, nick_name: 'work')
-        login_as(user)
-        visit cart_path
-
-        expect(page).to have_button("Check Out #{user.addresses[0].nick_name}")
-        expect(page).to have_button("Check Out #{user.addresses[1].nick_name}")
-        expect(page).to have_button("Check Out #{user.addresses[2].nick_name}")
-        click_button "Check Out #{user.addresses[2].nick_name}"
-        new_order = Order.last
-        within("#order-#{new_order.id}") do
-          expect(page).to have_link("Order ID #{new_order.id}")
-          expect(page).to have_content("Status: pending")
-          expect(page).to have_content("Address: #{user.addresses[2].nick_name}")
-        end
-      end
     it "does not let me checkout with no addresses" do
         user = create(:user)
         login_as(user)
