@@ -95,7 +95,6 @@ RSpec.describe "Checking out" do
     it "does not let me checkout with no addresses" do
         user = create(:user)
         login_as(user)
-        # allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
         visit cart_path
         expect(page).to have_link("You must have an address to check out")
         expect(page).to_not have_button("Check Out")
