@@ -183,7 +183,7 @@ class User < ApplicationRecord
     self.joins(:orders)
         .where(orders: {status: :shipped})
         .group(:state, :city)
-        .select('users.city, users.state, count(orders.id) AS order_count')
+        .select('addresses.city, addresses.state, count(orders.id) AS order_count')
         .order('order_count DESC')
         .limit(limit)
   end
