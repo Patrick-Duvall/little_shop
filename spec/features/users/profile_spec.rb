@@ -178,5 +178,35 @@ RSpec.describe 'user profile', type: :feature do
       expect(page).to_not have_content("#{a2.nick_name} : #{a2.address}, #{a2.city} #{a2.state}, #{a2.zip}")
     end
 
+#     As a registered user, When I visit my profile
+# -Next to each address I see a button to edit that address.
+# -When I click this button I am taken to an address edit form
+# -When I fill out and submit this form I am redirected to my profile
+# -where the address is edited
+
+    it "allows me to update an address" do
+      a1 = @u1.addresses.create(nick_name: "work", address: "223 road", city: "town", state: "Indiana", zip: "47906")
+      a2 = @u1.addresses.create(nick_name: "school", address: "2243 lane", city: "ville", state: "Maine", zip: "47906")
+      visit profile_path
+      within "#address-#{a1.id}" do
+        click_link "Edit #{a1.nick_name}"
+      end
+
+    fill_in "address_address", with: "444 blvd"
+    fill_in "address_city", with: "Dead Horse"
+    fill_in "address_state", with: "Montana"
+    fill_in "address_zip", with: "12544"
+    click_link "Edit Address"
+    expect(current_path).to eq(profile_path)
+    expect(page).to have_content("work : 444 blvd, Dead Horse Montana, 12544")
+      within "#address-#{a1.id}" do
+        click_link "Edit #{a1.nick_name}"
+      end
+    fill_in "address_zip", with: "80543"
+    click_link "Edit Address"
+    expect(page).to have_content("work : 444 blvd, Dead Horse Montana, 80543")
+
+    end
+
   end
 end
