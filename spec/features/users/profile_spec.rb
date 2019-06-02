@@ -245,7 +245,10 @@ RSpec.describe 'user profile', type: :feature do
         address = create(:address, user:user)
         address2 = create(:address, user:user, nick_name: 'school' )
         address3 = create(:address, user:user, nick_name: 'work' )
+        address4 = create(:address, user:user, nick_name: 'other' )
+
         pending_order = create(:order, user: user, address: address)
+        pending_order2 = create(:order, user: user, address: address4)
         packaged_order = create(:packaged_order, user: user, address: address)
         shipped_order = create(:shipped_order, user: user, address: address)
         cancelled_order = create(:cancelled_order, user: user, address: address)
@@ -275,6 +278,12 @@ RSpec.describe 'user profile', type: :feature do
         expect(current_path).to eq(profile_orders_path)
         within "#order-#{pending_order.id}" do
           expect(page).to have_content("Address: #{address2.nick_name}")
+        end
+        within "#order-#{pending_order2.id}" do
+          click_link("Change Address to #{address3.nick_name}")
+        end
+        within "#order-#{pending_order2.id}" do
+          expect(page).to have_content("Address: #{address3.nick_name}")
         end
       end
     end
