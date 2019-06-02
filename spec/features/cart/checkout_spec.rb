@@ -75,6 +75,24 @@ RSpec.describe "Checking out" do
     end
   end
 
+  describe "when checking out" do
+    it "allows me to choose an address to ship to" do
+      user = create(:user)
+      login_as(user)
+      visit cart_path
+
+      click_button "Check Out #{user.addresses[0].nick_name}"
+      new_order = Order.last
+      expect(current_path).to eq(profile_orders_path)
+      within("#order-#{new_order.id}") do
+        expect(page).to have_link("Order ID #{new_order.id}")
+        expect(page).to have_content("Status: pending")
+        expect(page).to have_content("Address: #{user.addresses[0].name}")
+      end
+
+    end
+  end
+
   context "as a visitor" do
     it "should tell the user to login or register" do
       visit cart_path
