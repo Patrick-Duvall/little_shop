@@ -5,9 +5,9 @@ FactoryBot.define do
     sequence(:name) { |n| "User Name #{n}" }
     role { 0 }
     active { true }
-      after :create do |user|
-        create :address, user: user
-      end           # has_one
+      # after :create do |user|
+      #   create :address, user: user
+      # end           # has_one
     end
   factory :inactive_user, parent: :user do
     sequence(:name) { |n| "Inactive User Name #{n}" }

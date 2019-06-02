@@ -148,7 +148,6 @@ RSpec.describe User, type: :model do
 
       @m2 = create(:merchant)
       @i10 = create(:item, merchant_id: @m2.id, inventory: 20)
-
       o1 = create(:shipped_order, user: @u1)
       o2 = create(:shipped_order, user: @u2)
       o3 = create(:shipped_order, user: @u3)
