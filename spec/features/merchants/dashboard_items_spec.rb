@@ -5,6 +5,7 @@ include ActionView::Helpers::NumberHelper
 RSpec.describe 'Merchant Dashboard Items page' do
   before :each do
     @merchant = create(:merchant)
+    create(:address, user: @merchant)
     @admin = create(:admin)
 
     @items = create_list(:item, 3, user: @merchant)
