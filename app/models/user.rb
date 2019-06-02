@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :addresses
   has_many :orders
   has_many :order_items, through: :orders
+  accepts_nested_attributes_for :addresses
 
   # as a merchant
   has_many :items, foreign_key: 'merchant_id'

@@ -3,26 +3,27 @@
   <%= f.label :name %>:
   <%= f.text_field :name %>
 </p>
+<%= f.fields_for :addresses, @address do |address_field| %>
+  <p>
+    <%= address_field.label :address %>:
+    <%= address_field.text_field :address %>
+  </p>
 
-<p>
-  <%= f.label :address %>:
-  <%= f.text_field :address %>
-</p>
+  <p>
+    <%= address_field.label :city %>:
+    <%= address_field.text_field :city %>
+  </p>
 
-<p>
-  <%= f.label :city %>:
-  <%= f.text_field :city %>
-</p>
+  <p>
+    <%= address_field.label :state %>:
+    <%= address_field.text_field :state %>
+  </p>
 
-<p>
-  <%= f.label :state %>:
-  <%= f.text_field :state %>
-</p>
-
-<p>
-  <%= f.label :zip %>:
-  <%= f.text_field :zip %>
-</p>
+  <p>
+    <%= address_field.label :zip %>:
+    <%= address_field.text_field :zip %>
+  </p>
+<% end %>
 
 <p>
   <%= f.label :email %>:

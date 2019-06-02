@@ -148,7 +148,7 @@ RSpec.describe 'user profile', type: :feature do
 
       click_link "Add address"
       expect(current_path).to eq(new_user_address_path(@u1))
-        fill_in "address_nick_name", with: "work"
+      fill_in "address_nick_name", with: "work"
       fill_in "address_address", with: "123 st"
       fill_in "address_city", with: "Granger"
       fill_in "address_state", with: "Montana"
@@ -206,6 +206,7 @@ RSpec.describe 'user profile', type: :feature do
     expect(page).to have_content("work : 444 blvd, Dead Horse Montana, 80543")
 
     end
+
 
   end
 end

@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @address = Address.new
   end
 
   def show
@@ -15,6 +16,7 @@ class UsersController < ApplicationController
   end
 
   def create
+    require "pry"; binding.pry
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
