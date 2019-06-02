@@ -80,6 +80,7 @@ RSpec.describe 'Merchant Dashboard Items page' do
   describe 'other merchants from modifying my items' do
     before :each do
       @bad_merchant = create(:merchant)
+      create(:address, user: @bad_merchant)
       login_as(@bad_merchant)
     end
 
