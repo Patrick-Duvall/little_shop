@@ -166,9 +166,14 @@ RSpec.describe 'user profile', type: :feature do
       end
       expect(current_path).to eq(profile_path)
       expect(page).to_not have_css("#address-#{a1.id}")
-      save_and_open_page
       order.reload
       expect(order.address_id).to eq(nil)
+      click_link("Customer Orders")
+      save_and_open_page
+      within "#order-#{order.id}" do
+        expect(page).to have_content("Order ID #{order.id}")
+        expect(page).to_not have_content("Address: #{a1.nick_name}")
+      end
 
     end
 

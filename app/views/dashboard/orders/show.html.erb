@@ -1,8 +1,10 @@
 <%= tag.div id: "order-#{@order.id}" do %>
   <p>Customer Name: <%= @user.name %></p>
+  <% if @order.address %>
   <p>Customer Address:</p>
   <p><%= @order.address.address %></p>
   <p><%= @order.address.city %>, <%= @order.address.state %> <%= @order.address.zip %></p>
+  <% end %>
 
   <p>Order Status: <%= @order.status %></p>
 
