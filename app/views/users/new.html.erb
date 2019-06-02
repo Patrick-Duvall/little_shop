@@ -1,3 +1,48 @@
 <h1>Register</h1>
 
-<%= render partial: 'form', locals: {form_submit_path: registration_path} %>
+<%= form_for @user, url: register_path do |f| %>
+<p>
+  <%= f.label :name %>:
+  <%= f.text_field :name %>
+</p>
+<%= f.fields_for @address do |address_field| %>
+  <p>
+    <%= address_field.label :address %>:
+    <%= address_field.text_field :address %>
+  </p>
+
+  <p>
+    <%= address_field.label :city %>:
+    <%= address_field.text_field :city %>
+  </p>
+
+  <p>
+    <%= address_field.label :state %>:
+    <%= address_field.text_field :state %>
+  </p>
+
+  <p>
+    <%= address_field.label :zip %>:
+    <%= address_field.text_field :zip %>
+  </p>
+<% end %>
+
+<p>
+  <%= f.label :email %>:
+  <%= f.text_field :email %>
+</p>
+
+<p>
+  <%= f.label :password %>:
+  <%= f.password_field :password %>
+</p>
+
+<p>
+  <%= f.label :password_confirmation %>:
+  <%= f.password_field :password_confirmation %>
+</p>
+
+<p>
+  <%= f.submit "Submit" %>
+</p>
+<% end %>
