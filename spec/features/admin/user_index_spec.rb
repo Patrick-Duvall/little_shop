@@ -4,7 +4,9 @@ RSpec.describe 'Admin User Index' do
   describe 'as an admin' do
     it 'sees all default users with links to admin user path' do
       @user_1 = create(:user)
+      create(:address, user: @user_1)
       @user_2 = create(:user)
+      create(:address, user: @user_2)
       @merchant = create(:merchant)
       @admin_1 = create(:admin)
       @admin_2 = create(:admin)
