@@ -276,7 +276,6 @@ RSpec.describe 'user profile', type: :feature do
           click_link("Change Address to #{address2.nick_name}")
         end
         expect(current_path).to eq(profile_orders_path)
-        save_and_open_page
         within "#order-#{pending_order.id}" do
           expect(page).to have_content("Address: #{address2.nick_name}")
         end
@@ -308,7 +307,6 @@ RSpec.describe 'user profile', type: :feature do
         within "#address-#{address4.id}" do #cancelled can change
           click_link("Delete #{address4.nick_name}")
         end
-        save_and_open_page
         expect(current_path).to eq(profile_path)
         expect(page).to_not have_css("#address-#{address4.nick_name}")
         within "#address-#{address3.id}" do #packaged cannot
@@ -316,7 +314,6 @@ RSpec.describe 'user profile', type: :feature do
         end
         expect(current_path).to eq(profile_path)
         expect(page).to have_content("Cannot Delete #{address3.nick_name}, it is associated with a packaged or shipped order")
-        save_and_open_page
         expect(page).to have_css("#address-#{address3.id}")
         within "#address-#{address2.id}" do #shipped canot
           click_link("Delete #{address2.nick_name}")
