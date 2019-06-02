@@ -168,12 +168,13 @@ RSpec.describe 'user profile', type: :feature do
       visit profile_path
       within "#address-#{a1.id}" do
         click_link "Delete #{a1.nick_name}"
-    end
-    expect(current_path).to eq(profile_path)
-    expect(page).to_not have_content("#{a1.nick_name} : #{a1.address}, #{a1.city} #{a1.state}, #{a1.zip}")
-    within "#address-#{a12.id}" do
-      click_button "Delete #{a12.nick_name}"
-    end
+      end
+      expect(current_path).to eq(profile_path)
+      expect(page).to_not have_content("#{a1.nick_name} : #{a1.address}, #{a1.city} #{a1.state}, #{a1.zip}")
+
+      within "#address-#{a2.id}" do
+        click_link "Delete #{a2.nick_name}"
+      end
       expect(page).to_not have_content("#{a2.nick_name} : #{a2.address}, #{a2.city} #{a2.state}, #{a2.zip}")
     end
 
