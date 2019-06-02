@@ -87,7 +87,7 @@ RSpec.describe "Checking out" do
       within("#order-#{new_order.id}") do
         expect(page).to have_link("Order ID #{new_order.id}")
         expect(page).to have_content("Status: pending")
-        expect(page).to have_content("Address: #{user.addresses[0].name}")
+        expect(page).to have_content("Address: #{user.addresses[0].nick_name}")
       end
 
     end
