@@ -15,18 +15,18 @@ class User < ApplicationRecord
   # as a merchant
   has_many :items, foreign_key: 'merchant_id'
 
-  def address
-    addresses[0].address
-  end
-  # def city
-  #   addresses[0].city
+  # def address
+  #   addresses[0].address
   # end
-  # def state
-  #   addresses[0].state
+  # # def city
+  # #   addresses[0].city
+  # # end
+  # # def state
+  # #   addresses[0].state
+  # # end
+  # def zip
+  #   addresses[0].zip
   # end
-  def zip
-    addresses[0].zip
-  end
 
   def outstanding_order_count
     items.joins(:order_items).select('order_items.*').where('order_items.fulfilled = false').count
