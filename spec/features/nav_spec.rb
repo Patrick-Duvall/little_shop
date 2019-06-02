@@ -3,8 +3,11 @@ require 'rails_helper'
 RSpec.describe 'Site Nav', type: :feature do
   before :each do
     @user = create(:user)
+    create(:address, user: @user)
     @user_2 = create(:user)
+    create(:address, user: @user_2)
     @merchant = create(:merchant)
+    create(:address, user: @merchant)
     @admin = create(:admin)
 
     item_1 = create(:item, user: @merchant)
