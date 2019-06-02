@@ -273,7 +273,7 @@ RSpec.describe User, type: :model do
         u4 = create(:user) # state: "IA", city: "Des Moines")
         a6 = create(:address, user: u4, state: "IA", city: "Des Moines")
         u5 = create(:user) #, state: "IA", city: "Des Moines")
-        a5 = create(:address, :user: u5, state: "IA", city: "Des Moines")
+        a5 = create(:address, user: u5, state: "IA", city: "Des Moines")
         u6 = create(:user) # state: "IA", city: "Des Moines")
         a6 = create(:address, user: u6, state: "IA", city: "Des Moines")
         @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
@@ -332,6 +332,7 @@ RSpec.describe User, type: :model do
       end
 
       it ".top_user_cities_by_order_count" do
+        require "pry"; binding.pry
         expect(User.top_user_cities_by_order_count(3)[0].state).to eq("CO")
         expect(User.top_user_cities_by_order_count(3)[0].city).to eq("Fairfield")
         expect(User.top_user_cities_by_order_count(3)[0].order_count).to eq(2)
