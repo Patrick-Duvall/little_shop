@@ -118,21 +118,21 @@ RSpec.describe User, type: :model do
       @u1.addresses.create( state: "CO", city: "Anywhere")
 
       @u2 = create(:user) # state: "OK", city: "Tulsa")
-      addresses = []
+      @u2.addresses = []
       @u2.addresses.create( state: "OK", city: "Tulsa")
 
       @u3 = create(:user) # state: "IA", city: "Anywhere")
-      addresses = []
+      @u3.addresses = []
       @u3.addresses.create( state: "IA", city: "Anywhere")
 
       u4 = create(:user) # state: "IA", city: "Des Moines")
-      addresses = []
+      u4.addresses = []
       u4.addresses.create( state: "IA", city: "Des Moines")
       u5 = create(:user) #, state: "IA", city: "Des Moines")
-      addresses = []
+      u5.addresses = []
       u5.addresses.create( state: "IA", city: "Des Moines")
       u6 = create(:user) # state: "IA", city: "Des Moines")
-      addresses = []
+      u6.addresses = []
       u6.addresses.create( state: "IA", city: "Des Moines")
 
       @m1 = create(:merchant)
@@ -266,12 +266,24 @@ RSpec.describe User, type: :model do
 
     describe "statistics" do
       before :each do
-        u1 = create(:user, state: "CO", city: "Fairfield")
-        u2 = create(:user, state: "OK", city: "OKC")
-        u3 = create(:user, state: "IA", city: "Fairfield")
-        u4 = create(:user, state: "IA", city: "Des Moines")
-        u5 = create(:user, state: "IA", city: "Des Moines")
-        u6 = create(:user, state: "IA", city: "Des Moines")
+        u1 = create(:user) # state: "CO", city: "Fairfield")
+        u1.addresses = []
+        u1.addresses.create( state: "CO", city: "Fairfield")
+        u2 = create(:user) # state: "OK", city: "OKC")
+        u2.addresses = []
+        u2.addresses.create( state: "OK", city: "OKC")
+        u3 = create(:user) # state: "IA", city: "Fairfield")
+        u3.addresses = []
+        u2.addresses.create( state: "IA", city: "Fairfield")
+        u4 = create(:user) # state: "IA", city: "Des Moines")
+        u4.addresses = []
+        u4.addresses.create( state: "IA", city: "Des Moines")
+        u5 = create(:user) #, state: "IA", city: "Des Moines")
+        u5.addresses = []
+        u5.addresses.create( state: "IA", city: "Des Moines")
+        u6 = create(:user) # state: "IA", city: "Des Moines")
+        u6.addresses = []
+        u6.addresses.create( state: "IA", city: "Des Moines")
         @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
         i1 = create(:item, merchant_id: @m1.id)
         i2 = create(:item, merchant_id: @m2.id)
