@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'User Order workflow', type: :feature do
   before :each do
     @user = create(:user)
+    create(:address, user: @user)
     @admin = create(:admin)
 
     @merchant_1 = create(:merchant)
@@ -32,6 +33,7 @@ RSpec.describe 'User Order workflow', type: :feature do
   describe 'as a user trying to cancel someone elses order' do
     it 'should not be successful' do
       @user2 = create(:user)
+      create(:address, user: @user2)
       login_as(@user2)
       page.driver.submit :delete, "/profile/orders/#{@order_1.id}", {}
       expect(page.status_code).to eq(404)
