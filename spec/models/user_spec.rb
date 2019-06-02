@@ -113,12 +113,27 @@ RSpec.describe User, type: :model do
 
   describe 'instance methods' do
     before :each do
-      @u1 = create(:user, state: "CO", city: "Anywhere")
-      @u2 = create(:user, state: "OK", city: "Tulsa")
-      @u3 = create(:user, state: "IA", city: "Anywhere")
-      u4 = create(:user, state: "IA", city: "Des Moines")
-      u5 = create(:user, state: "IA", city: "Des Moines")
-      u6 = create(:user, state: "IA", city: "Des Moines")
+      @u1 = create(:user) #state: "CO", city: "Anywhere"
+      @u1.addresses = []
+      @u1.addresses.create( state: "CO", city: "Anywhere")
+
+      @u2 = create(:user) # state: "OK", city: "Tulsa")
+      addresses = []
+      @u2.addresses.create( state: "OK", city: "Tulsa")
+
+      @u3 = create(:user) # state: "IA", city: "Anywhere")
+      addresses = []
+      @u3.addresses.create( state: "IA", city: "Anywhere")
+
+      u4 = create(:user) # state: "IA", city: "Des Moines")
+      addresses = []
+      u4.addresses.create( state: "IA", city: "Des Moines")
+      u5 = create(:user) #, state: "IA", city: "Des Moines")
+      addresses = []
+      u5.addresses.create( state: "IA", city: "Des Moines")
+      u6 = create(:user) # state: "IA", city: "Des Moines")
+      addresses = []
+      u6.addresses.create( state: "IA", city: "Des Moines")
 
       @m1 = create(:merchant)
       @i1 = create(:item, merchant_id: @m1.id, inventory: 20)
