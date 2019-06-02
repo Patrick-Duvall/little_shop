@@ -332,7 +332,6 @@ RSpec.describe User, type: :model do
       end
 
       it ".top_user_cities_by_order_count" do
-        require "pry"; binding.pry
         expect(User.top_user_cities_by_order_count(3)[0].state).to eq("CO")
         expect(User.top_user_cities_by_order_count(3)[0].city).to eq("Fairfield")
         expect(User.top_user_cities_by_order_count(3)[0].order_count).to eq(2)
