@@ -115,6 +115,7 @@ RSpec.describe 'user profile', type: :feature do
   describe "User can manage addresses" do
     before :each do
       @u1 = create(:user)
+      create(:address, user: @u1)
       visit root_path
       click_link "Log in"
       fill_in "email", with: @u1.email
