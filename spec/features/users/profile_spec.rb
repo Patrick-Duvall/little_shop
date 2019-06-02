@@ -272,7 +272,7 @@ RSpec.describe 'user profile', type: :feature do
         within "#order-#{pending_order.id}" do
           click_link("Change Address to #{address2.nick_name}")
         end
-        expect(current_path).to eq(profile_path)
+        expect(current_path).to eq(profile_orders_path)
         within "#order-#{pending_order.id}" do
           expect(page).to have_content("Address: #{address2.nick_name}")
         end
