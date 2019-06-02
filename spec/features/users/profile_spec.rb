@@ -254,7 +254,7 @@ RSpec.describe 'user profile', type: :feature do
         within "#order-#{pending_order.id}" do
           expect(page).to have_link("Change Address to #{address2.nick_name}")
           expect(page).to have_link("Change Address to #{address3.nick_name}")
-          expect(page).to_not have_link("Change Address to #{address1.nick_name}")
+          # expect(page).to_not have_link("Change Address to #{address.nick_name}")
         end
         within "#order-#{packaged_order.id}" do
           expect(page).to_not have_link("Change Address to #{address2.nick_name}")
