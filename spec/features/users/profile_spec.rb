@@ -169,7 +169,6 @@ RSpec.describe 'user profile', type: :feature do
       order.reload
       expect(order.address_id).to eq(nil)
       click_link("Customer Orders")
-      save_and_open_page
       within "#order-#{order.id}" do
         expect(page).to have_content("Order ID #{order.id}")
         expect(page).to_not have_content("Address: #{a1.nick_name}")
@@ -231,6 +230,54 @@ RSpec.describe 'user profile', type: :feature do
       end
     end
 
+#     As a registered user, when I visit my profile_orders
+# -if an order is pending
+# -next to each order I see a dropdown of my addresses
+# If I change my address on this dropdown and click submit
+# -I am redirected to my profile page
+# -And see the address for this order has changed.
+# -If I try to visit the path to change a non pending order I am redirected to a 404
+
+    describe "when I have a pending order" do
+      it "lets me edit the address of that order" do
+        click_link "Log out"
+        user = create(:user)
+        address = create(:address, user:user)
+        address2 = create(:address, user:user)
+        address3 = create(:address, user:user)
+        pending_order = create(:order, user: user, address: address)
+        packaged_order = create(:packaged_order, user: user, address: address)
+        shipped_order = create(:shipped_order, user: user, address: address)
+        cancelled_order = create(:cancelled_order, user: user, address: address)
+        login_as(user)
+        visit profile_orders_path
+        within "#order-#{pending_order.id}" do
+          expect(page).to have_link("Change Address to #{address2.nick_name}")
+          expect(page).to have_link("Change Address to #{address3.nick_name}")
+          expect(page).to_not have_link("Change Address to #{address1.nick_name}")
+        end
+        within "#order-#{packaged_order.id}" do
+          expect(page).to_not have_link("Change Address to #{address2.nick_name}")
+          expect(page).to_not have_link("Change Address to #{address3.nick_name}")
+        end
+        within "#order-#{shipped_order.id}" do
+          expect(page).to_not have_link("Change Address to #{address2.nick_name}")
+          expect(page).to_not have_link("Change Address to #{address3.nick_name}")
+        end
+        within "#order-#{cancelled_order.id}" do
+          expect(page).to_not have_link("Change Address to #{address2.nick_name}")
+          expect(page).to_not have_link("Change Address to #{address3.nick_name}")
+        end
+
+        within "#order-#{pending_order.id}" do
+          click_link("Change Address to #{address2.nick_name}")
+        end
+        expect(current_path).to eq(profile_path)
+        within "#order-#{pending_order.id}" do
+          expect(page).to have_content("Address: #{address2.nick_name}")
+        end
+      end
+    end
 
   end
 end
