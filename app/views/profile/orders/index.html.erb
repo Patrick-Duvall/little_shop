@@ -16,7 +16,7 @@
           <p>Total Cost: <%= order.total_cost %></p>
           <% if order.pending? %>
           <%= @user.addresses.each do |address| %>
-          <%= link_to "Change Address to #{address.nick_name}", profile_order_path(order, address_id: address.id), method: :patch  %>
+          <%= link_to "Change Address to #{address.nick_name}", profile_order_path(order, address_id: address.id), method: :patch unless address == order.address  %>
           <% end %>
           <% end %>
 
