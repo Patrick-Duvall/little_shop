@@ -11,14 +11,25 @@ class AddressesController < ApplicationController
   end
 
   def edit
-    @address = Address.find(params[:id])
-    @user = User.find(params[:user_id])
+    address = Address.find(params[:id])
+    if address.editable?
+      @address = address
+      @user = User.find(params[:user_id])
+    else
+      flash[:warning] = "Cannot Edit #{address.nick_name}, it is associated with a packaged or shipped order"
+      redirect_to profile_path
+    end
   end
 
   def update
     address = Address.find(params[:id])
+    if address.editable?
     address.update(address_params)
     redirect_to profile_path
+    else
+      flash[:warning] = "Cannot Edit #{address.nick_name}, it is associated with a packaged or shipped order"
+      redirect_to profile_path
+    end
   end
 
   def destroy

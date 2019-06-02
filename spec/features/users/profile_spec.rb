@@ -344,10 +344,10 @@ RSpec.describe 'user profile', type: :feature do
         within "#address-#{address4.id}" do #cancelled can change
           click_link("Edit #{address4.nick_name}")
         end
-        fill_in "address_name", with: "a new address"
-        click_button "Edit Address"
+        fill_in "address_nick_name", with: "a new address"
+        click_button "Update Address"
         expect(current_path).to eq(profile_path)
-        within("#address-#{address4.nick_name}") do
+        within("#address-#{address4.id}") do
           expect(page).to have_content("a new address")
         end
         within "#address-#{address3.id}" do #packaged cannot
@@ -365,7 +365,7 @@ RSpec.describe 'user profile', type: :feature do
           click_link("Edit #{address.nick_name}")
         end
         fill_in "address_state", with: "Mississippi"
-        click_button "Edit Address"
+        click_button "Update Address"
         expect(page).to_not have_content("Cannot Edit #{address.nick_name}, it is associated with a packaged or shipped order")
         within ("#address-#{address.id}") do
           expect(page).to have_content("Mississippi")
