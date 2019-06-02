@@ -91,7 +91,22 @@ RSpec.describe "Checking out" do
         expect(page).to have_content("Status: pending")
         expect(page).to have_content("Address: #{user.addresses[0].nick_name}")
       end
-
+    end
+    it "does not let me checkout with no addresses" do
+        user = create(:user)
+        login_as(user)
+        # allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+        visit cart_path
+        expect(page).to have_content("You must have an address to check out")
+        expect(page).to_not have_button("Check Out")
+    end
+    it "doesnt tell me I need an address If I have one" do
+      user = create(:user)
+      a1 = create(:address, user: user)
+      login_as(user)
+      visit cart_path
+      save_and_open_page
+      expect(page).to_not have_content("You must have an address to check out")
     end
   end
 
@@ -108,5 +123,7 @@ RSpec.describe "Checking out" do
       click_link "log in"
       expect(current_path).to eq(login_path)
     end
+
+
   end
 end
