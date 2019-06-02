@@ -8,22 +8,22 @@
 <%= f.fields_for @address do |address_field| %>
   <p>
     <%= address_field.label :address %>:
-    <%= address_field.text_field :address %>
+    <%= address_field.text_field :address, required: true %>
   </p>
 
   <p>
     <%= address_field.label :city %>:
-    <%= address_field.text_field :city %>
+    <%= address_field.text_field :city, required: true %>
   </p>
 
   <p>
     <%= address_field.label :state %>:
-    <%= address_field.text_field :state %>
+    <%= address_field.text_field :state, required: true %>
   </p>
 
   <p>
     <%= address_field.label :zip %>:
-    <%= address_field.text_field :zip %>
+    <%= address_field.text_field :zip, required: true %>
   </p>
 <% end %>
 
