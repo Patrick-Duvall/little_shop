@@ -114,7 +114,7 @@ class User < ApplicationRecord
          .group('users.id')
          .select('users.name, count(orders.id) AS count')
          .order('count DESC')
-         .limit(1).first
+         .limit(1).first 
   end
 
   def top_user_by_item_count

@@ -114,26 +114,22 @@ RSpec.describe User, type: :model do
   describe 'instance methods' do
     before :each do
       @u1 = create(:user) #state: "CO", city: "Anywhere"
-      @u1.addresses = []
-      @u1.addresses.create( state: "CO", city: "Anywhere")
+      a1 = create(:address, user: @u1, state: "CO", city: "Anywhere")
 
       @u2 = create(:user) # state: "OK", city: "Tulsa")
-      @u2.addresses = []
-      @u2.addresses.create( state: "OK", city: "Tulsa")
+      a2 = create(:address, user: @u2, state: "OK", city: "Tulsa")
 
       @u3 = create(:user) # state: "IA", city: "Anywhere")
-      @u3.addresses = []
-      @u3.addresses.create( state: "IA", city: "Anywhere")
+      a3 = create(:address, user: @u3, state: "IA", city: "Anywhere")
 
       u4 = create(:user) # state: "IA", city: "Des Moines")
-      u4.addresses = []
-      u4.addresses.create( state: "IA", city: "Des Moines")
+      a4 = create(:address, user: u4, state: "IA", city: "Des Moines")
+
       u5 = create(:user) #, state: "IA", city: "Des Moines")
-      u5.addresses = []
-      u5.addresses.create( state: "IA", city: "Des Moines")
+      a5 = create(:address, user: u5, state: "IA", city: "Des Moines")
+
       u6 = create(:user) # state: "IA", city: "Des Moines")
-      u6.addresses = []
-      u6.addresses.create( state: "IA", city: "Des Moines")
+      create(:address, user: u6, state: "IA", city: "Des Moines")
 
       @m1 = create(:merchant)
       @i1 = create(:item, merchant_id: @m1.id, inventory: 20)
@@ -148,12 +144,12 @@ RSpec.describe User, type: :model do
 
       @m2 = create(:merchant)
       @i10 = create(:item, merchant_id: @m2.id, inventory: 20)
-      o1 = create(:shipped_order, user: @u1)
-      o2 = create(:shipped_order, user: @u2)
-      o3 = create(:shipped_order, user: @u3)
-      o4 = create(:shipped_order, user: @u1)
-      o5 = create(:shipped_order, user: @u1)
-      o6 = create(:cancelled_order, user: u5)
+      o1 = create(:shipped_order, user: @u1, address: a1)
+      o2 = create(:shipped_order, user: @u2, address: a2)
+      o3 = create(:shipped_order, user: @u3, address: a3)
+      o4 = create(:shipped_order, user: @u1, address: a1)
+      o5 = create(:shipped_order, user: @u1, address: a1)
+      o6 = create(:cancelled_order, user: u5, address: a5)
       o7 = create(:order, user: u6)
       @oi1 = create(:order_item, item: @i1, order: o1, quantity: 2, created_at: 1.days.ago)
       @oi2 = create(:order_item, item: @i2, order: o2, quantity: 8, created_at: 7.days.ago)
@@ -216,6 +212,7 @@ RSpec.describe User, type: :model do
     end
 
     it '.top_cities_by_items_shipped' do
+      require "pry"; binding.pry
       expect(@m1.top_cities_by_items_shipped(3)[0].city).to eq("Anywhere")
       expect(@m1.top_cities_by_items_shipped(3)[0].state).to eq("IA")
       expect(@m1.top_cities_by_items_shipped(3)[0].quantity).to eq(10)
