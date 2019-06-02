@@ -9,6 +9,7 @@ RSpec.describe "adding an item to the cart" do
   context "a visitor or regular user can add items to the cart" do
     before :each do
       @user = create(:user)
+      create(:address, user: @user)
     end
 
     scenario "as a visitor" do
@@ -36,6 +37,7 @@ RSpec.describe "adding an item to the cart" do
   context "an admin or merchant does not see add cart button" do
     before :each do
       @merchant = create(:merchant)
+      create(:address, user: @merchant)
       @admin = create(:admin)
     end
 
