@@ -22,11 +22,15 @@ class AddressesController < ApplicationController
   end
 
   def destroy
-    
     address = Address.find(params[:id])
-    address.orders.each{|order| order.update(address_id: nil)}
-    address.destroy
-    redirect_to profile_path
+    if address.editable?
+      address.orders.each{|order| order.update(address_id: nil)}
+      address.destroy
+      redirect_to profile_path
+    else
+      flash[:warning] = "Cannot Delete #{address.nick_name}, it is associated with a packaged or shipped order"
+      redirect_to profile_path
+    end
 
   end
 

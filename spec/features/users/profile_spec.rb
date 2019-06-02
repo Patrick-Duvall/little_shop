@@ -316,17 +316,18 @@ RSpec.describe 'user profile', type: :feature do
         end
         expect(current_path).to eq(profile_path)
         expect(page).to have_content("Cannot Delete #{address3.nick_name}, it is associated with a packaged or shipped order")
-        expect(page).to have_css("#address-#{address3.nick_name}")
+        save_and_open_page
+        expect(page).to have_css("#address-#{address3.id}")
         within "#address-#{address2.id}" do #shipped canot
           click_link("Delete #{address2.nick_name}")
         end
         expect(page).to have_content("Cannot Delete #{address2.nick_name}, it is associated with a packaged or shipped order")
-        expect(page).to have_css("#address-#{address2.nick_name}")
+        expect(page).to have_css("#address-#{address2.id}")
         within "#address-#{address.id}" do #pending can
           click_link("Delete #{address.nick_name}")
         end
         expect(page).to_not have_content("Cannot Delete #{address.nick_name}, it is associated with a packaged or shipped order")
-        expect(page).to_not have_css("#address-#{address.nick_name}")
+        expect(page).to_not have_css("#address-#{address.id}")
 
       end
     end
