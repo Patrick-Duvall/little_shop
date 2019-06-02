@@ -22,11 +22,8 @@ RSpec.describe User, type: :model do
       user = User.create(
         email: "email",
         password: "password",
-        name: "name",
-        address: "address",
-        city: "city",
-        state: "state",
-        zip: "zip"
+        name: "name"
+
       )
       expect(user.role).to eq('default')
       expect(user.default?).to be_truthy
@@ -37,10 +34,6 @@ RSpec.describe User, type: :model do
         email: "email",
         password: "password",
         name: "name",
-        address: "address",
-        city: "city",
-        state: "state",
-        zip: "zip",
         role: 1
       )
       expect(user.role).to eq('merchant')
@@ -52,10 +45,6 @@ RSpec.describe User, type: :model do
         email: "email",
         password: "password",
         name: "name",
-        address: "address",
-        city: "city",
-        state: "state",
-        zip: "zip",
         role: 2
       )
       expect(user.role).to eq('admin')
