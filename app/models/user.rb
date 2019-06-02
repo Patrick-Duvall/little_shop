@@ -28,7 +28,6 @@ class User < ApplicationRecord
     addresses[0].zip
   end
 
-
   def outstanding_order_count
     items.joins(:order_items).select('order_items.*').where('order_items.fulfilled = false').count
   end
