@@ -142,7 +142,6 @@ RSpec.describe "merchant index workflow", type: :feature do
 
       it "top 3 merchants by price and quantity, with their revenue" do
         visit merchants_path
-        save_and_open_page
 
         within("#top-three-merchants-revenue") do
           expect(page).to have_content("#{@m7.name}: $192.00")
