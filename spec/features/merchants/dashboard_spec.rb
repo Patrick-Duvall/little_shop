@@ -4,6 +4,7 @@ RSpec.describe 'merchant dashboard' do
 
   before :each do
     @merchant = create(:merchant)
+    create(:address, user: @merchant)
     @admin = create(:admin)
     @i1, @i2 = create_list(:item, 2, user: @merchant)
     @i3 = create(:item, user: @merchant, image:"http://clipart-library.com/images/6Tpo6G8TE.jpg")
@@ -32,10 +33,10 @@ RSpec.describe 'merchant dashboard' do
       after :each do
         expect(page).to have_content(@merchant.name)
         expect(page).to have_content("Email: #{@merchant.email}")
-        expect(page).to have_content("Address: #{@merchant.address}")
-        expect(page).to have_content("City: #{@merchant.city}")
-        expect(page).to have_content("State: #{@merchant.state}")
-        expect(page).to have_content("Zip: #{@merchant.zip}")
+        expect(page).to have_content("Address: #{@merchant.addresses.first.address}")
+        expect(page).to have_content("City: #{@merchant.addresses.first.city}")
+        expect(page).to have_content("State: #{@merchant.addresses.first.state}")
+        expect(page).to have_content("Zip: #{@merchant.addresses.first.zip}")
       end
     end
   end
@@ -49,10 +50,10 @@ RSpec.describe 'merchant dashboard' do
     it 'shows merchant information' do
       expect(page).to have_content(@merchant.name)
       expect(page).to have_content("Email: #{@merchant.email}")
-      expect(page).to have_content("Address: #{@merchant.address}")
-      expect(page).to have_content("City: #{@merchant.city}")
-      expect(page).to have_content("State: #{@merchant.state}")
-      expect(page).to have_content("Zip: #{@merchant.zip}")
+      expect(page).to have_content("Address: #{@merchant.addresses.first.address}")
+      expect(page).to have_content("City: #{@merchant.addresses.first.city}")
+      expect(page).to have_content("State: #{@merchant.addresses.first.state}")
+      expect(page).to have_content("Zip: #{@merchant.addresses.first.zip}")
     end
 
     it 'does not have a link to edit information' do

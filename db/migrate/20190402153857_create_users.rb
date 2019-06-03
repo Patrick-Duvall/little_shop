@@ -19,7 +19,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
     end
 
     add_index :users, :email
-    add_index :users, :city
+    # add_index :users, :city
     add_index :users, :state
   end
 end

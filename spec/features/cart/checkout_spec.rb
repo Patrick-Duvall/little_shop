@@ -23,6 +23,7 @@ RSpec.describe "Checking out" do
   context "as a logged in regular user" do
     before :each do
       user = create(:user)
+      a1 = create(:address, user: user)
       login_as(user)
       visit cart_path
 
@@ -72,6 +73,25 @@ RSpec.describe "Checking out" do
         expect(page).to have_content("Quantity: 2")
         expect(page).to have_content("Fulfilled: No")
       end
+    end
+  end
+
+  describe "when checking out" do
+    it "allows me to choose an address to ship to" do
+      user = create(:user)
+      a1 = create(:address, user: user)
+      login_as(user)
+      visit cart_path
+
+      click_button "Check Out #{user.addresses[0].nick_name}"
+      new_order = Order.last
+      expect(current_path).to eq(profile_orders_path)
+      within("#order-#{new_order.id}") do
+        expect(page).to have_link("Order ID #{new_order.id}")
+        expect(page).to have_content("Status: pending")
+        expect(page).to have_content("Address: #{user.addresses[0].nick_name}")
+      end
+
     end
   end
 

@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe "clicking the logout button" do
   before :each do
     @user = create(:user)
+    create(:address, user: @user)
     login_as(@user)
     visit root_path
     click_link "Log out"

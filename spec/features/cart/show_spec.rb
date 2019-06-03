@@ -12,6 +12,7 @@ RSpec.describe "Cart show page" do
   context "a regular user or visitor sees their cart summary" do
     scenario "as a regular user" do
       user = create(:user)
+        a1 = create(:address, user: user)
       login_as(user)
     end
 
@@ -66,6 +67,7 @@ RSpec.describe "Cart show page" do
   context "a regular user or visitor sees an empty cart message" do
     scenario "as a regular user" do
       user = create(:user)
+        a1 = create(:address, user: user)
       login_as(user)
     end
 
@@ -83,6 +85,7 @@ RSpec.describe "Cart show page" do
   context "a regular user or visitor can empty their cart" do
     scenario "as a regular user" do
       user = create(:user)
+      a1 = create(:address, user: user)
       login_as(user)
     end
 
@@ -111,6 +114,7 @@ RSpec.describe "Cart show page" do
   context "a regular user or visitor can remove an item from the cart" do
     scenario "as a regular user" do
       user = create(:user)
+      a1 = create(:address, user: user)
       login_as(user)
     end
 
@@ -140,6 +144,7 @@ RSpec.describe "Cart show page" do
   context "a regular user or visitor can increment item quantities" do
     scenario "as a regular user" do
       user = create(:user)
+      a1 = create(:address, user: user)
       login_as(user)
     end
 
@@ -168,6 +173,7 @@ RSpec.describe "Cart show page" do
   context "a regular user or visitor can decrement item quantities" do
     scenario "as a regular user" do
       user = create(:user)
+      a1 = create(:address, user: user)
       login_as(user)
     end
 

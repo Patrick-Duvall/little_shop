@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'user profile', type: :feature do
   before :each do
     @user = create(:user)
+    @address = create(:address, user: @user)
   end
 
   describe 'registered user visits their profile' do
@@ -15,8 +16,8 @@ RSpec.describe 'user profile', type: :feature do
         expect(page).to have_content("Role: #{@user.role}")
         expect(page).to have_content("Email: #{@user.email}")
         within '#address-details' do
-          expect(page).to have_content("Address: #{@user.address}")
-          expect(page).to have_content("#{@user.city}, #{@user.state} #{@user.zip}")
+          expect(page).to have_content("Address: #{@user.addresses.first.address}")
+          expect(page).to have_content("#{@user.addresses.first.city}, #{@user.addresses.first.state} #{@user.addresses.first.zip}")
         end
         expect(page).to have_link('Edit Profile Data')
       end
@@ -29,16 +30,11 @@ RSpec.describe 'user profile', type: :feature do
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
 
         visit profile_path
-
-        click_link 'Edit'
+        click_link 'Edit Profile Data'
 
         expect(current_path).to eq('/profile/edit')
         expect(find_field('Name').value).to eq(@user.name)
         expect(find_field('Email').value).to eq(@user.email)
-        expect(find_field('Address').value).to eq(@user.address)
-        expect(find_field('City').value).to eq(@user.city)
-        expect(find_field('State').value).to eq(@user.state)
-        expect(find_field('Zip').value).to eq(@user.zip)
         expect(find_field('Password').value).to eq(nil)
         expect(find_field('Password confirmation').value).to eq(nil)
       end
@@ -48,10 +44,6 @@ RSpec.describe 'user profile', type: :feature do
       before :each do
         @updated_name = 'Updated Name'
         @updated_email = 'updated_email@example.com'
-        @updated_address = 'newest address'
-        @updated_city = 'new new york'
-        @updated_state = 'S. California'
-        @updated_zip = '33333'
         @updated_password = 'newandextrasecure'
       end
 
@@ -64,10 +56,6 @@ RSpec.describe 'user profile', type: :feature do
 
           fill_in :user_name, with: @updated_name
           fill_in :user_email, with: @updated_email
-          fill_in :user_address, with: @updated_address
-          fill_in :user_city, with: @updated_city
-          fill_in :user_state, with: @updated_state
-          fill_in :user_zip, with: @updated_zip
           fill_in :user_password, with: @updated_password
           fill_in :user_password_confirmation, with: @updated_password
 
@@ -81,8 +69,6 @@ RSpec.describe 'user profile', type: :feature do
           within '#profile-data' do
             expect(page).to have_content("Email: #{@updated_email}")
             within '#address-details' do
-              expect(page).to have_content("#{@updated_address}")
-              expect(page).to have_content("#{@updated_city}, #{@updated_state} #{@updated_zip}")
             end
           end
           expect(updated_user.password_digest).to_not eq(old_digest)
@@ -95,10 +81,6 @@ RSpec.describe 'user profile', type: :feature do
 
           fill_in :user_name, with: @updated_name
           fill_in :user_email, with: @updated_email
-          fill_in :user_address, with: @updated_address
-          fill_in :user_city, with: @updated_city
-          fill_in :user_state, with: @updated_state
-          fill_in :user_zip, with: @updated_zip
 
           click_button 'Submit'
 
@@ -109,10 +91,6 @@ RSpec.describe 'user profile', type: :feature do
           expect(page).to have_content("#{@updated_name}")
           within '#profile-data' do
             expect(page).to have_content("Email: #{@updated_email}")
-            within '#address-details' do
-              expect(page).to have_content("#{@updated_address}")
-              expect(page).to have_content("#{@updated_city}, #{@updated_state} #{@updated_zip}")
-            end
           end
           expect(updated_user.password_digest).to eq(old_digest)
         end
@@ -136,6 +114,7 @@ RSpec.describe 'user profile', type: :feature do
   describe "User can manage addresses" do
     before :each do
       @u1 = create(:user)
+      create(:address, user: @u1)
       visit root_path
       click_link "Log in"
       fill_in "email", with: @u1.email
@@ -148,7 +127,7 @@ RSpec.describe 'user profile', type: :feature do
 
       click_link "Add address"
       expect(current_path).to eq(new_user_address_path(@u1))
-        fill_in "address_nick_name", with: "work"
+      fill_in "address_nick_name", with: "work"
       fill_in "address_address", with: "123 st"
       fill_in "address_city", with: "Granger"
       fill_in "address_state", with: "Montana"
@@ -206,6 +185,7 @@ RSpec.describe 'user profile', type: :feature do
     expect(page).to have_content("work : 444 blvd, Dead Horse Montana, 80543")
 
     end
+
 
   end
 end

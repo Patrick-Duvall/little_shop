@@ -4,6 +4,7 @@ RSpec.describe "admin users workflow" do
   before :each do
     @admin = create(:admin)
     @user = create(:user)
+    create(:address, user: @user)
   end
 
   context "as an admin" do

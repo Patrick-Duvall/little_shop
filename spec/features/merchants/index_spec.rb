@@ -5,7 +5,10 @@ RSpec.describe "merchant index workflow", type: :feature do
     describe "displays all active merchant information" do
       before :each do
         @merchant_1, @merchant_2 = create_list(:merchant, 2)
+        create(:address, user: @merchant_1)
+        create(:address, user: @merchant_2)
         @inactive_merchant = create(:inactive_merchant)
+        create(:address, user: @inactive_merchant)
       end
       scenario 'as a visitor' do
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(nil)
@@ -21,7 +24,7 @@ RSpec.describe "merchant index workflow", type: :feature do
 
         within("#merchant-#{@merchant_1.id}") do
           expect(page).to have_content(@merchant_1.name)
-          expect(page).to have_content("#{@merchant_1.city}, #{@merchant_1.state}")
+          expect(page).to have_content("#{@merchant_1.addresses.first.city}, #{@merchant_1.addresses.first.state}")
           expect(page).to have_content("Registered Date: #{@merchant_1.created_at}")
           if @am_admin
             expect(page).to have_button('Disable Merchant')
@@ -30,7 +33,7 @@ RSpec.describe "merchant index workflow", type: :feature do
 
         within("#merchant-#{@merchant_2.id}") do
           expect(page).to have_content(@merchant_2.name)
-          expect(page).to have_content("#{@merchant_2.city}, #{@merchant_2.state}")
+          expect(page).to have_content("#{@merchant_2.addresses.first.city}, #{@merchant_2.addresses.first.state}")
           expect(page).to have_content("Registered Date: #{@merchant_2.created_at}")
           if @am_admin
             expect(page).to have_button('Disable Merchant')
@@ -43,7 +46,7 @@ RSpec.describe "merchant index workflow", type: :feature do
           end
         else
           expect(page).to_not have_content(@inactive_merchant.name)
-          expect(page).to_not have_content("#{@inactive_merchant.city}, #{@inactive_merchant.state}")
+          expect(page).to_not have_content("#{@inactive_merchant.addresses.first.city}, #{@inactive_merchant.addresses.first.state}")
         end
       end
     end
@@ -51,6 +54,7 @@ RSpec.describe "merchant index workflow", type: :feature do
     describe 'admins can enable/disable merchants' do
       before :each do
         @merchant_1 = create(:merchant)
+        create(:address, user: @merchant_1)
         @admin = create(:admin)
       end
       it 'allows an admin to disable a merchant' do
@@ -92,27 +96,41 @@ RSpec.describe "merchant index workflow", type: :feature do
 
     describe "shows merchant statistics" do
       before :each do
-        u1 = create(:user, state: "CO", city: "Fairfield")
-        u3 = create(:user, state: "IA", city: "Fairfield")
-        u2 = create(:user, state: "OK", city: "OKC")
-        u4 = create(:user, state: "IA", city: "Des Moines")
-        u5 = create(:user, state: "IA", city: "Des Moines")
-        u6 = create(:user, state: "IA", city: "Des Moines")
+        u1 = create(:user) # state: "CO", city: "Fairfield")
+        a1 = create(:address, user: u1, state: "CO", city: "Fairfield")
+        u3 = create(:user) # state: "IA", city: "Fairfield")
+        a2 = create(:address, user: u3, state: "IA", city: "Fairfield" )
+        u2 = create(:user) # state: "OK", city: "OKC")
+        a3 = create(:address, user: u2, state: "OK", city: "OKC" )
+        u4 = create(:user) # state: "IA", city: "Des Moines")
+        a4 = create(:address, user: u4, state: "IA", city: "Des Moines")
+        u5 = create(:user) # state: "IA", city: "Des Moines")
+        a5 = create(:address, user: u5 , state: "IA", city: "Des Moines")
+        u6 = create(:user) # state: "IA", city: "Des Moines")
+        a6 = create(:address, user: u6, state: "IA", city: "Des Moines")
         @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
-        i1 = create(:item, merchant_id: @m1.id)
-        i2 = create(:item, merchant_id: @m2.id)
-        i3 = create(:item, merchant_id: @m3.id)
-        i4 = create(:item, merchant_id: @m4.id)
-        i5 = create(:item, merchant_id: @m5.id)
-        i6 = create(:item, merchant_id: @m6.id)
-        i7 = create(:item, merchant_id: @m7.id)
-        @o1 = create(:shipped_order, user: u1)
-        @o2 = create(:shipped_order, user: u2)
-        @o3 = create(:shipped_order, user: u3)
-        @o4 = create(:shipped_order, user: u1)
-        @o5 = create(:cancelled_order, user: u5)
-        @o6 = create(:shipped_order, user: u6)
-        @o7 = create(:shipped_order, user: u6)
+        create(:address, user: @m1)
+        create(:address, user: @m2)
+        create(:address, user: @m3)
+        create(:address, user: @m4)
+        create(:address, user: @m5)
+        create(:address, user: @m6)
+        create(:address, user: @m7)
+        i1 = create(:item, user: @m1)
+        i2 = create(:item, user: @m2)
+        i3 = create(:item, user: @m3)
+        i4 = create(:item, user: @m4)
+        i5 = create(:item, user: @m5)
+        i6 = create(:item, user: @m6)
+        i7 = create(:item, user: @m7)
+
+        @o1 = create(:shipped_order, user: u1, address: a1)
+        @o2 = create(:shipped_order, user: u2, address: a2)
+        @o3 = create(:shipped_order, user: u3, address: a3)
+        @o4 = create(:shipped_order, user: u1, address: a1)
+        @o5 = create(:cancelled_order, user: u5, address: a5)
+        @o6 = create(:shipped_order, user: u6, address: a6)
+        @o7 = create(:shipped_order, user: u6, address: a6)
         oi1 = create(:fulfilled_order_item, item: i1, order: @o1, created_at: 5.minutes.ago)
         oi2 = create(:fulfilled_order_item, item: i2, order: @o2, created_at: 53.5.hours.ago)
         oi3 = create(:fulfilled_order_item, item: i3, order: @o3, created_at: 6.days.ago)
@@ -124,6 +142,7 @@ RSpec.describe "merchant index workflow", type: :feature do
 
       it "top 3 merchants by price and quantity, with their revenue" do
         visit merchants_path
+        save_and_open_page
 
         within("#top-three-merchants-revenue") do
           expect(page).to have_content("#{@m7.name}: $192.00")

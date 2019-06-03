@@ -3,16 +3,30 @@ class User < ApplicationRecord
 
   enum role: [:default, :merchant, :admin]
 
-  validates_presence_of :name, :address, :city, :state, :zip
+  validates_presence_of :name
   validates :email, presence: true, uniqueness: true
 
   # as a consumer
   has_many :addresses
   has_many :orders
   has_many :order_items, through: :orders
+  accepts_nested_attributes_for :addresses
 
   # as a merchant
   has_many :items, foreign_key: 'merchant_id'
+
+  # def address
+  #   addresses[0].address
+  # end
+  # # def city
+  # #   addresses[0].city
+  # # end
+  # # def state
+  # #   addresses[0].state
+  # # end
+  # def zip
+  #   addresses[0].zip
+  # end
 
   def outstanding_order_count
     items.joins(:order_items).select('order_items.*').where('order_items.fulfilled = false').count
@@ -62,10 +76,10 @@ class User < ApplicationRecord
   def top_states_by_items_shipped(limit)
     items.joins(:order_items)
          .joins('join orders on orders.id = order_items.order_id')
-         .joins('join users on users.id = orders.user_id')
+         .joins('join addresses on addresses.id = orders.address_id')
          .where(order_items: {fulfilled: true}, orders: {status: :shipped})
-         .group('users.state')
-         .select('users.state, sum(order_items.quantity) AS quantity')
+         .group('addresses.state')
+         .select('addresses.state, sum(order_items.quantity) AS quantity')
          .order('quantity DESC')
          .limit(limit)
   end
@@ -73,10 +87,10 @@ class User < ApplicationRecord
   def top_cities_by_items_shipped(limit)
     items.joins(:order_items)
          .joins('join orders on orders.id = order_items.order_id')
-         .joins('join users on users.id = orders.user_id')
+         .joins('join addresses on addresses.id = orders.address_id')
          .where(order_items: {fulfilled: true}, orders: {status: :shipped})
-         .group('users.state, users.city')
-         .select('users.state, users.city, sum(order_items.quantity) AS quantity')
+         .group('addresses.state, addresses.city')
+         .select('addresses.state, addresses.city, sum(order_items.quantity) AS quantity')
          .order('quantity DESC')
          .limit(limit)
   end
@@ -158,18 +172,20 @@ class User < ApplicationRecord
 
   def self.top_user_states_by_order_count(limit)
     self.joins(:orders)
+        .joins('join addresses on users.id = addresses.user_id')
         .where(orders: {status: :shipped})
-        .group(:state)
-        .select('users.state, count(orders.id) AS order_count')
+        .group('addresses.state')
+        .select('addresses.state, count(orders.id) as order_count')
         .order('order_count DESC')
         .limit(limit)
-  end
+      end
 
   def self.top_user_cities_by_order_count(limit)
     self.joins(:orders)
+        .joins('join addresses on users.id = addresses.user_id')
         .where(orders: {status: :shipped})
-        .group(:state, :city)
-        .select('users.city, users.state, count(orders.id) AS order_count')
+        .group('addresses.state, addresses.city')
+        .select('addresses.city, addresses.state, count(orders.id) AS order_count')
         .order('order_count DESC')
         .limit(limit)
   end

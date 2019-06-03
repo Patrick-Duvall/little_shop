@@ -3,13 +3,12 @@ FactoryBot.define do
     sequence(:email) { |n| "user_#{n}@gmail.com" }
     password { "password" }
     sequence(:name) { |n| "User Name #{n}" }
-    sequence(:address) { |n| "Address #{n}" }
-    sequence(:city) { |n| "City #{n}" }
-    sequence(:state) { |n| "State #{n}" }
-    sequence(:zip) { |n| "Zip #{n}" }
     role { 0 }
     active { true }
-  end
+      # after :create do |user|
+      #   create :address, user: user
+      # end           # has_one
+    end
   factory :inactive_user, parent: :user do
     sequence(:name) { |n| "Inactive User Name #{n}" }
     sequence(:email) { |n| "inactive_user_#{n}@gmail.com" }

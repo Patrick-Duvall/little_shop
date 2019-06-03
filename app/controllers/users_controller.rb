@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @address = Address.new
   end
 
   def show
@@ -17,12 +18,15 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      # Address.new(address_params)
+      @user.addresses.create!(address_params)
       session[:user_id] = @user.id
       flash[:success] = "Registration Successful! You are now logged in."
       redirect_to profile_path
     else
       flash.now[:danger] = @user.errors.full_messages
       @user.update(email: "", password: "")
+      @address = Address.new
       render :new
     end
   end
@@ -35,14 +39,20 @@ class UsersController < ApplicationController
       redirect_to profile_path
     else
       flash.now[:danger] = @user.errors.full_messages
-      render :new
+      render :edit
     end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:name, :address, :city, :state, :zip, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name,:email, :password, :password_confirmation)
+  end
+
+  def address_params
+    new_params = params.require(:user).require(:address).permit(:address, :city, :state, :zip)
+    new_params[:nick_name] = "home"
+    new_params
   end
 
   def user_update_params

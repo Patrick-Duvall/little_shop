@@ -3,6 +3,7 @@
   <p>Created: <%= @order.created_at %></p>
   <p>Last Update: <%= @order.updated_at %></p>
   <p>Status: <%= @order.status %></p>
+  <p>Address: <%= @order.address.nick_name %></p>
   <p>Item Count: <%= @order.total_item_count %></p>
   <p>Total Cost: <%= number_to_currency(@order.total_cost) %></p>
 

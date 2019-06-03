@@ -6,10 +6,6 @@ RSpec.describe User, type: :model do
     it { should validate_uniqueness_of :email }
     it { should validate_presence_of :password }
     it { should validate_presence_of :name }
-    it { should validate_presence_of :address }
-    it { should validate_presence_of :city }
-    it { should validate_presence_of :state }
-    it { should validate_presence_of :zip }
   end
 
   describe 'relationships' do
@@ -26,11 +22,8 @@ RSpec.describe User, type: :model do
       user = User.create(
         email: "email",
         password: "password",
-        name: "name",
-        address: "address",
-        city: "city",
-        state: "state",
-        zip: "zip"
+        name: "name"
+
       )
       expect(user.role).to eq('default')
       expect(user.default?).to be_truthy
@@ -41,10 +34,6 @@ RSpec.describe User, type: :model do
         email: "email",
         password: "password",
         name: "name",
-        address: "address",
-        city: "city",
-        state: "state",
-        zip: "zip",
         role: 1
       )
       expect(user.role).to eq('merchant')
@@ -56,10 +45,6 @@ RSpec.describe User, type: :model do
         email: "email",
         password: "password",
         name: "name",
-        address: "address",
-        city: "city",
-        state: "state",
-        zip: "zip",
         role: 2
       )
       expect(user.role).to eq('admin')
@@ -128,12 +113,23 @@ RSpec.describe User, type: :model do
 
   describe 'instance methods' do
     before :each do
-      @u1 = create(:user, state: "CO", city: "Anywhere")
-      @u2 = create(:user, state: "OK", city: "Tulsa")
-      @u3 = create(:user, state: "IA", city: "Anywhere")
-      u4 = create(:user, state: "IA", city: "Des Moines")
-      u5 = create(:user, state: "IA", city: "Des Moines")
-      u6 = create(:user, state: "IA", city: "Des Moines")
+      @u1 = create(:user) #state: "CO", city: "Anywhere"
+      a1 = create(:address, user: @u1, state: "CO", city: "Anywhere")
+
+      @u2 = create(:user) # state: "OK", city: "Tulsa")
+      a2 = create(:address, user: @u2, state: "OK", city: "Tulsa")
+
+      @u3 = create(:user) # state: "IA", city: "Anywhere")
+      a3 = create(:address, user: @u3, state: "IA", city: "Anywhere")
+
+      u4 = create(:user) # state: "IA", city: "Des Moines")
+      a4 = create(:address, user: u4, state: "IA", city: "Des Moines")
+
+      u5 = create(:user) #, state: "IA", city: "Des Moines")
+      a5 = create(:address, user: u5, state: "IA", city: "Des Moines")
+
+      u6 = create(:user) # state: "IA", city: "Des Moines")
+      create(:address, user: u6, state: "IA", city: "Des Moines")
 
       @m1 = create(:merchant)
       @i1 = create(:item, merchant_id: @m1.id, inventory: 20)
@@ -148,13 +144,12 @@ RSpec.describe User, type: :model do
 
       @m2 = create(:merchant)
       @i10 = create(:item, merchant_id: @m2.id, inventory: 20)
-
-      o1 = create(:shipped_order, user: @u1)
-      o2 = create(:shipped_order, user: @u2)
-      o3 = create(:shipped_order, user: @u3)
-      o4 = create(:shipped_order, user: @u1)
-      o5 = create(:shipped_order, user: @u1)
-      o6 = create(:cancelled_order, user: u5)
+      o1 = create(:shipped_order, user: @u1, address: a1)
+      o2 = create(:shipped_order, user: @u2, address: a2)
+      o3 = create(:shipped_order, user: @u3, address: a3)
+      o4 = create(:shipped_order, user: @u1, address: a1)
+      o5 = create(:shipped_order, user: @u1, address: a1)
+      o6 = create(:cancelled_order, user: u5, address: a5)
       o7 = create(:order, user: u6)
       @oi1 = create(:order_item, item: @i1, order: o1, quantity: 2, created_at: 1.days.ago)
       @oi2 = create(:order_item, item: @i2, order: o2, quantity: 8, created_at: 7.days.ago)
@@ -266,12 +261,21 @@ RSpec.describe User, type: :model do
 
     describe "statistics" do
       before :each do
-        u1 = create(:user, state: "CO", city: "Fairfield")
-        u2 = create(:user, state: "OK", city: "OKC")
-        u3 = create(:user, state: "IA", city: "Fairfield")
-        u4 = create(:user, state: "IA", city: "Des Moines")
-        u5 = create(:user, state: "IA", city: "Des Moines")
-        u6 = create(:user, state: "IA", city: "Des Moines")
+        u1 = create(:user) # state: "CO", city: "Fairfield")
+        a1 = create(:address, user: u1, state: "CO", city: "Fairfield")
+
+        u2 = create(:user) # state: "OK", city: "OKC")
+        a2 = create(:address, user: u2, state: "OK", city: "OKC")
+
+        u3 = create(:user) # state: "IA", city: "Fairfield")
+        a3 = create(:address, user: u3, state: "IA", city: "Fairfield")
+
+        u4 = create(:user) # state: "IA", city: "Des Moines")
+        a6 = create(:address, user: u4, state: "IA", city: "Des Moines")
+        u5 = create(:user) #, state: "IA", city: "Des Moines")
+        a5 = create(:address, user: u5, state: "IA", city: "Des Moines")
+        u6 = create(:user) # state: "IA", city: "Des Moines")
+        a6 = create(:address, user: u6, state: "IA", city: "Des Moines")
         @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
         i1 = create(:item, merchant_id: @m1.id)
         i2 = create(:item, merchant_id: @m2.id)
@@ -280,13 +284,13 @@ RSpec.describe User, type: :model do
         i5 = create(:item, merchant_id: @m5.id)
         i6 = create(:item, merchant_id: @m6.id)
         i7 = create(:item, merchant_id: @m7.id)
-        o1 = create(:shipped_order, user: u1)
-        o2 = create(:shipped_order, user: u2)
-        o3 = create(:shipped_order, user: u3)
-        o4 = create(:shipped_order, user: u1)
-        o5 = create(:cancelled_order, user: u5)
-        o6 = create(:shipped_order, user: u6)
-        o7 = create(:shipped_order, user: u6)
+        o1 = create(:shipped_order, user: u1, address: a1)
+        o2 = create(:shipped_order, user: u2, address: a2)
+        o3 = create(:shipped_order, user: u3, address: a3)
+        o4 = create(:shipped_order, user: u1, address: a1)
+        o5 = create(:cancelled_order, user: u5, address: a5)
+        o6 = create(:shipped_order, user: u6, address: a6)
+        o7 = create(:shipped_order, user: u6, address: a6)
         oi1 = create(:fulfilled_order_item, item: i1, order: o1, created_at: 1.days.ago)
         oi2 = create(:fulfilled_order_item, item: i2, order: o2, created_at: 7.days.ago)
         oi3 = create(:fulfilled_order_item, item: i3, order: o3, created_at: 6.days.ago)

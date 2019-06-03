@@ -6,11 +6,11 @@
   <p>Role: <%= @user.role %></p>
   <aside id="address-details">
     <h3>Address:</h3>
-    <p><%= @user.address %></p>
+    <p><%= @user.addresses.first.address %></p>
     <p>
-      <%= @user.city %>,
-      <%= @user.state %>
-      <%= @user.zip %>
+      <%= @user.addresses.first.city %>,
+      <%= @user.addresses.first.state %>
+      <%= @user.addresses.first.zip %>
     </p>
   </aside>
   <%= link_to "Add address", new_user_address_path(@user) %>

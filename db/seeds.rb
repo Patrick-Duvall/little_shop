@@ -4,17 +4,27 @@ include FactoryBot::Syntax::Methods
 
 # OrderItem.destroy_all
 # Order.destroy_all
+Address.destroy_all
 Item.destroy_all
 User.destroy_all
 
+
 admin = create(:admin)
 user_1, user_2 = create_list(:user, 2)
+address_1 = create(:address, user: user_1)
+address_2 = create(:address, user: user_2)
 merchant_1 = create(:merchant)
 
 merchant_2, merchant_3, merchant_4 = create_list(:merchant, 3)
+address_3 = create(:address, user: merchant_1)
+address_4 = create(:address, user: merchant_2)
+address_5 = create(:address, user: merchant_3)
+address_6 = create(:address, user: merchant_4)
 
 inactive_merchant_1 = create(:inactive_merchant)
+address_7 = create(:address, user: inactive_merchant_1)
 inactive_user_1 = create(:inactive_user)
+address_8 = create(:address, user: inactive_user_1)
 
 item_1 = create(:item, user: merchant_1)
 item_2 = create(:item, user: merchant_2)
