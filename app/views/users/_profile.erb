@@ -4,8 +4,10 @@
   <h2>Order Data</h2>
   <p>Email: <%= @user.email %></p>
   <p>Role: <%= @user.role %></p>
+
+  <% if !@addresses.empty? %>
   <aside id="address-details">
-    <h3>Address:</h3>
+    <h3>Primary Address:</h3>
     <p><%= @user.addresses.first.address %></p>
     <p>
       <%= @user.addresses.first.city %>,
@@ -13,9 +15,11 @@
       <%= @user.addresses.first.zip %>
     </p>
   </aside>
+<% end %>
+
   <%= link_to "Add address", new_user_address_path(@user) %>
-  <% if @addresses %>
-    <p>Other Addresses</p>
+  <% if !@addresses.empty? %>
+    <p>My Addresses</p>
     <%  @addresses.each do |address| %>
     <section id="address-<%=address.id%>">
       <p>

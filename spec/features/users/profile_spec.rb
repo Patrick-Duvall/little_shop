@@ -186,6 +186,31 @@ RSpec.describe 'user profile', type: :feature do
 
     end
 
+    it "still loads my profile page when I have no addresses" do
+      user = create(:user)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+      visit profile_path
+        expect(page).to_not have_content('Primary Address:')
+      expect(page).to_not have_content('My Addresses')
+    end
+
+    it "still shows user addresses when they exist" do
+      user = create(:user)
+      address = create(:address, user: user)
+      address2 = create(:address, user: user)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+      visit profile_path
+      within "#address-details" do
+        expect(page).to have_content(user.addresses.first.address)
+      end
+      within "#address-#{address.id}" do
+        expect(page).to have_link("Delete #{address.nick_name}")
+      end
+      within "#address-#{address2.id}" do
+        expect(page).to have_link("Delete #{address2.nick_name}")
+      end
+    end
+
 
   end
 end
