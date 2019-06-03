@@ -91,8 +91,30 @@ RSpec.describe "Checking out" do
         expect(page).to have_content("Status: pending")
         expect(page).to have_content("Address: #{user.addresses[0].nick_name}")
       end
-
     end
+    it "does not let me checkout with no addresses" do
+        user = create(:user)
+        login_as(user)
+        visit cart_path
+        expect(page).to have_link("You must have an address to check out")
+        expect(page).to_not have_button("Check Out")
+        click_link("You must have an address to check out")
+        expect(current_path).to eq(new_user_address_path(user))
+    end
+    it "doesnt tell me I need an address If I have one" do
+      user = create(:user)
+      a1 = create(:address, user: user)
+      login_as(user)
+      visit cart_path
+      expect(page).to_not have_link("You must have an address to check out")
+    end
+    # it "renders 404 if I try manually" do
+    #   # -If I try to check out manually I am redirected to a 404 page
+    #   user = create(:user)
+    #   visit profile_order_path(user)
+    #   expect(page.status_code).to eq(404)
+    #
+    # end
   end
 
   context "as a visitor" do
@@ -108,5 +130,7 @@ RSpec.describe "Checking out" do
       click_link "log in"
       expect(current_path).to eq(login_path)
     end
+
+
   end
 end
