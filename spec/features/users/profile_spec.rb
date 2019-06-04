@@ -276,7 +276,6 @@ RSpec.describe 'user profile', type: :feature do
           click_link("Change Address to #{address2.nick_name}")
         end
         expect(current_path).to eq(profile_orders_path)
-        save_and_open_page
         within "#order-#{pending_order.id}" do
           expect(page).to have_content("Address: #{address2.nick_name}")
         end
@@ -286,6 +285,92 @@ RSpec.describe 'user profile', type: :feature do
         within "#order-#{pending_order2.id}" do
           expect(page).to have_content("Address: #{address3.nick_name}")
         end
+      end
+    end
+
+    describe "addresses with associated orders cant be changed" do
+      it "does not allow me to delete an address associated with a packaged/shipped order" do
+        click_link("Log out")
+        user = create(:user)
+        address = create(:address, user:user)
+        address2 = create(:address, user:user, nick_name: 'school' )
+        address3 = create(:address, user:user, nick_name: 'work' )
+        address4 = create(:address, user:user, nick_name: 'other' )
+
+        pending_order = create(:order, user: user, address: address)
+        pending_order2 = create(:order, user: user, address: address4)
+        packaged_order = create(:packaged_order, user: user, address: address3)
+        shipped_order = create(:shipped_order, user: user, address: address2)
+        cancelled_order = create(:cancelled_order, user: user, address: address4)
+        login_as(user)
+        visit profile_path
+        within "#address-#{address4.id}" do #cancelled can change
+          click_link("Delete #{address4.nick_name}")
+        end
+        expect(current_path).to eq(profile_path)
+        expect(page).to_not have_css("#address-#{address4.nick_name}")
+        within "#address-#{address3.id}" do #packaged cannot
+          click_link("Delete #{address3.nick_name}")
+        end
+        expect(current_path).to eq(profile_path)
+        expect(page).to have_content("Cannot Delete #{address3.nick_name}, it is associated with a packaged or shipped order")
+        expect(page).to have_css("#address-#{address3.id}")
+        within "#address-#{address2.id}" do #shipped canot
+          click_link("Delete #{address2.nick_name}")
+        end
+        expect(page).to have_content("Cannot Delete #{address2.nick_name}, it is associated with a packaged or shipped order")
+        expect(page).to have_css("#address-#{address2.id}")
+        within "#address-#{address.id}" do #pending can
+          click_link("Delete #{address.nick_name}")
+        end
+        expect(page).to_not have_content("Cannot Delete #{address.nick_name}, it is associated with a packaged or shipped order")
+        expect(page).to_not have_css("#address-#{address.id}")
+      end
+      it "does not allow me to delete an address associated with a packaged/shipped order" do
+        click_link("Log out")
+        user = create(:user)
+        address = create(:address, user:user)
+        address2 = create(:address, user:user, nick_name: 'school' )
+        address3 = create(:address, user:user, nick_name: 'work' )
+        address4 = create(:address, user:user, nick_name: 'other' )
+
+        pending_order = create(:order, user: user, address: address)
+        pending_order2 = create(:order, user: user, address: address4)
+        packaged_order = create(:packaged_order, user: user, address: address3)
+        shipped_order = create(:shipped_order, user: user, address: address2)
+        cancelled_order = create(:cancelled_order, user: user, address: address4)
+        login_as(user)
+        visit profile_path
+        within "#address-#{address4.id}" do #cancelled can change
+          click_link("Edit #{address4.nick_name}")
+        end
+        fill_in "address_nick_name", with: "a new address"
+        click_button "Update Address"
+        expect(current_path).to eq(profile_path)
+        within("#address-#{address4.id}") do
+          expect(page).to have_content("a new address")
+        end
+        within "#address-#{address3.id}" do #packaged cannot
+          click_link("Edit #{address3.nick_name}")
+        end
+        expect(current_path).to eq(profile_path)
+        expect(page).to have_content("Cannot Edit #{address3.nick_name}, it is associated with a packaged or shipped order")
+        expect(page).to have_css("#address-#{address3.id}")
+        within "#address-#{address2.id}" do #shipped canot
+          click_link("Edit #{address2.nick_name}")
+        end
+        expect(page).to have_content("Cannot Edit #{address2.nick_name}, it is associated with a packaged or shipped order")
+        expect(page).to have_css("#address-#{address2.id}")
+        within "#address-#{address.id}" do #pending can
+          click_link("Edit #{address.nick_name}")
+        end
+        fill_in "address_state", with: "Mississippi"
+        click_button "Update Address"
+        expect(page).to_not have_content("Cannot Edit #{address.nick_name}, it is associated with a packaged or shipped order")
+        within ("#address-#{address.id}") do
+          expect(page).to have_content("Mississippi")
+        end
+
       end
     end
 

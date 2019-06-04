@@ -2,8 +2,8 @@ require 'factory_bot_rails'
 
 include FactoryBot::Syntax::Methods
 
-# OrderItem.destroy_all
-# Order.destroy_all
+OrderItem.destroy_all
+Order.destroy_all
 Address.destroy_all
 Item.destroy_all
 User.destroy_all
@@ -12,6 +12,8 @@ User.destroy_all
 admin = create(:admin)
 user_1, user_2 = create_list(:user, 2)
 address_1 = create(:address, user: user_1)
+address_9 = create(:address, user: user_1, nick_name: "Work")
+address_10 = create(:address, user: user_1, nick_name: "School")
 address_2 = create(:address, user: user_2)
 merchant_1 = create(:merchant)
 
@@ -34,6 +36,12 @@ create_list(:item, 10, user: merchant_1)
 
 inactive_item_1 = create(:inactive_item, user: merchant_1)
 inactive_item_2 = create(:inactive_item, user: inactive_merchant_1)
+
+packaged_order = create(:packaged_order, user: user_1, address: address_9)
+shipped_order = create(:shipped_order, user: user_1, address: address_10)
+
+create(:order_item, order: packaged_order, item: item_4)
+create(:order_item, order: shipped_order, item: item_3)
 
 # Random.new_seed
 # rng = Random.new
